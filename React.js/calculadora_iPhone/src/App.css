@@ -1,0 +1,19 @@
+.App {
+  padding: 4px 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 406px;
+  height: 908px;
+  border-radius: 12px;
+  border: none;
+  background-color: #000000;
+  padding: 12px;
+  margin: 0px;
+  text-align: center;
+}

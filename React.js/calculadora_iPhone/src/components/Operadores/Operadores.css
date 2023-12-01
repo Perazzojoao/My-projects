@@ -1,0 +1,13 @@
+.operadores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 16px;
+  max-width: 100px;
+  position:absolute;
+  margin-left: 312px;
+}
+
+.operadores button {
+  background-color: #ee8c2b;
+}

@@ -1,0 +1,12 @@
+.numerico {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 16px;
+  max-width: 300px;
+  max-height: 390px;
+}
+
+.numerico button{
+  background-color: #333333;
+}

@@ -1,0 +1,11 @@
+.teclado {
+  display: flex;
+  justify-content:space-evenly;
+}
+
+.teclado form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  align-items: flex-start;
+}

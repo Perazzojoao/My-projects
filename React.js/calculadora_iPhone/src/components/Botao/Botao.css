@@ -1,0 +1,15 @@
+.botao-0 {
+  width: 188px;
+  border-radius: 68px 68px 68px 68px;
+  text-align: start;
+  padding-left: 30px;
+}
+
+button {
+  border: none;
+  border-radius: 50%;
+  width: 88px;
+  height: 88px;
+  font-size: 48px;
+  color: #FFFFFF;
+}

@@ -1,0 +1,14 @@
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-evenly;
+  gap: 16px;
+  margin-bottom: 16px;
+  margin-left: 3px;
+}
+
+.acoes button {
+  background-color: #999999;
+  color: #000000;
+}
