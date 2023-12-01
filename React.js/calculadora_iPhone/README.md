@@ -1,2 +1,2 @@
 # Projeto Calculadora Iphone
-> Recriando a calculadora padrão do Iphone em React.js em javascript
+> Recriando a calculadora padrão do Iphone em React.js com javascript
