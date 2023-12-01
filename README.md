@@ -2,5 +2,5 @@
 
 > Repositório utilizado para salvar meus projetos pessoais
 
-## Projetos:
+## Categorias:
 - React.js
