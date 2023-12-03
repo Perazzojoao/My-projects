@@ -7,7 +7,7 @@ export const ValorContext = React.createContext();
 
 function App() {
 
-  const [valorTela, setValorTela] = useState(0);
+  const [valorTela, setValorTela] = useState('0');
 
   
   return (

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import './Botao.css';
 import { ValorContext } from '../../App';
+import './Botao.css';
 
 const Botao = ({value}) => {
 

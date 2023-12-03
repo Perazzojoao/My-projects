@@ -14,7 +14,7 @@ const Numerico = () => {
       <Botao value='2'/>
       <Botao value='3'/>
       <Botao value='0'/>
-      <Botao value=','/>
+      <Botao value='.'/>
     </div>
    );
 }
