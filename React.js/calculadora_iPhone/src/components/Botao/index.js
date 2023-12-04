@@ -11,7 +11,7 @@ const Botao = ({value}) => {
    }
 
   return ( 
-      <button onClick={alteraValor} className={`botao-${value}`} name={value} defaultValue={value}>{value}</button>
+      <button onClick={alteraValor} className={`botao-${value}`} name={value}>{value === '*' ? 'x' : value}</button>
    );
 }
  

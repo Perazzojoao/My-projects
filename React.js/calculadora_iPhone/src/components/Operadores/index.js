@@ -5,7 +5,7 @@ const Operadores = () => {
   return ( 
     <aside className='operadores'>
       <Botao value='/'/>
-      <Botao value='x'/>
+      <Botao value='*'/>
       <Botao value='-'/>
       <Botao value='+'/>
       <Botao value='='/>
