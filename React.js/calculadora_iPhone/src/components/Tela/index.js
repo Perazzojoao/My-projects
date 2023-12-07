@@ -7,7 +7,7 @@ const Tela = () => {
   const valor = useContext(ValorContext);
   const [screen, setScreen] = useState('');
   const [expressao, setExpressao] = useState({primaria: '', secundaria: ''});
-  const operador = useRef('');
+  const operador= useRef(['']);
   let resultado;
 
   useEffect(() => {
@@ -23,7 +23,8 @@ const Tela = () => {
       setScreen(valorAntigo => valorAntigo + valor.valorTela);
 
       if(expressao.secundaria) {
-        resultado = calculo();
+        const indice = operador.current.length
+        resultado = calculo(indice - 2);
         setExpressao({primaria: resultado, secundaria: ''});
       }
     } else {
@@ -31,6 +32,7 @@ const Tela = () => {
         case 'C':
           setScreen(0);
           setExpressao({primaria: '', secundaria: ''});
+          operador.current = [''];
           break;
         case '+/-':
           setScreen(valorAntigo => String(-1 * Number(valorAntigo)));
@@ -49,10 +51,8 @@ const Tela = () => {
             } else if(expressao.primaria) {
               setExpressao({...expressao , secundaria: Number(screen)});
             }
-            if(valor.valorTela !== '=') {
-              operador.current = valor.valorTela;
+              operador.current.push(valor.valorTela);
               console.log(operador.current);
-            }
           break;
       }
     }
@@ -76,9 +76,10 @@ const Tela = () => {
     }
   }
 
-  function calculo() {
+  function calculo(indice) {
     let resultado;
-    switch (operador.current) {
+    console.log(indice);
+    switch (operador.current[indice]) {
       case '/':
       resultado = expressao.primaria / expressao.secundaria;
       break;
