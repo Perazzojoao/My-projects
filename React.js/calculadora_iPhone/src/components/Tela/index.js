@@ -35,7 +35,11 @@ const Tela = () => {
           operador.current = [''];
           break;
         case '+/-':
-          setScreen(valorAntigo => String(-1 * Number(valorAntigo)));
+          if(!expressao.primaria) {
+            setScreen(valorAntigo => String(-1 * Number(valorAntigo)));
+          } else {
+            setExpressao(antigo => ({primaria: -1 * antigo.primaria}));
+          }
           break;
         case '%':
           setScreen(valorAntigo => String(0.01 * Number(valorAntigo)));
@@ -78,7 +82,6 @@ const Tela = () => {
 
   function calculo(indice) {
     let resultado;
-    console.log(indice);
     switch (operador.current[indice]) {
       case '/':
       resultado = expressao.primaria / expressao.secundaria;
