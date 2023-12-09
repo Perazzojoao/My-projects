@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { ValorContext } from '../../App';
+import { calculo, mostraTela, resetaTela } from '../../Functions/processamento';
 import './Tela.css';
 
 const Tela = () => {
@@ -10,9 +11,7 @@ const Tela = () => {
 	let resultado;
 
 	useEffect(() => {
-		if (valor.valorTela === '') {
-			setScreen('');
-		}
+		resetaTela(valor, setScreen);
 	}, [expressao]);
 
 	useEffect(() => {
@@ -21,8 +20,7 @@ const Tela = () => {
 			setScreen((valorAntigo) => valorAntigo + valor.valorTela);
 
 			if (expressao.secundaria) {
-				const indice = operador.current.length;
-				resultado = calculo(indice - 2);
+				resultado = calculo(operador, expressao);
 				setExpressao({ primaria: resultado, secundaria: '' });
 			}
 		} else {
@@ -58,54 +56,16 @@ const Tela = () => {
 						setExpressao({ ...expressao, secundaria: Number(screen) });
 					}
 					operador.current.push(valor.valorTela);
-					console.log(operador.current);
 					break;
 			}
-		}
-
-		if (expressao.primaria !== '') {
-			console.log(expressao);
 		}
 
 		valor.setValorTela('');
 	}, [valor]);
 
-	function mostraTela() {
-		if (screen) {
-			return screen;
-		} else {
-			if (expressao.primaria !== '') {
-				return expressao.primaria;
-			} else {
-				return 0;
-			}
-		}
-	}
-
-	function calculo(indice) {
-		let resultado;
-		switch (operador.current[indice]) {
-			case '/':
-				resultado = expressao.primaria / expressao.secundaria;
-				break;
-			case '*':
-				resultado = expressao.primaria * expressao.secundaria;
-				break;
-			case '-':
-				resultado = expressao.primaria - expressao.secundaria;
-				break;
-			case '+':
-				resultado = expressao.primaria + expressao.secundaria;
-				break;
-			default:
-				break;
-		}
-		return resultado;
-	}
-
 	return (
 		<div className='tela'>
-			<input name='tela' value={mostraTela()} readOnly></input>
+			<input name='tela' value={mostraTela(screen, expressao)} readOnly></input>
 		</div>
 	);
 };
