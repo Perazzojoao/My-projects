@@ -1,10 +1,12 @@
 import Screen from '@/components/screen';
+import KeyBoard from './components/KeyBoard';
 
 function App() {
 
   return (
-    <div className="container max-w-[430px] ">
+    <div className="container">
       <Screen />
+      <KeyBoard />
     </div>
   )
 }
