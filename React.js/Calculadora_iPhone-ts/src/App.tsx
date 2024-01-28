@@ -21,7 +21,6 @@ function App() {
 
 	useEffect(() => {
     setExpression();
-    console.log('ok');
 	}, [operator]);
 
   useEffect(() => {

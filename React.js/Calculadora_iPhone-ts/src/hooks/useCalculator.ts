@@ -21,8 +21,8 @@ export function useCalculator() {
 	};
 
 	const percentage = () => {
-		if (exp1) {
-			setResult(prev => ({ exp1: prev.exp1 / 100 }));
+		if (number === '0') {
+			setResult(prev => ({ exp1: prev.exp1 / 100, exp2: 0 }));
 			return;
 		}
 		setNumber(prev => {
@@ -31,12 +31,11 @@ export function useCalculator() {
 	};
 
 	const negative = () => {
-		if (exp1) {
-			setResult(prev => ({ exp1: prev.exp1 * (-1) }));
-			return;
+		if (number === '0') {
+			setResult(prev => ({ exp1: prev.exp1 * -1, exp2: 0 }));
 		}
 		setNumber(prev => {
-			return String(Number(prev) * (-1));
+			return String(Number(prev) * -1);
 		});
 	};
 
