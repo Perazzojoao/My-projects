@@ -1,5 +1,6 @@
 import { CalculatorContext } from '@/contexts/CalculatorContext';
 import { setLogicNumber } from '@/functions/setLogicNumber';
+import { useCalculator } from '@/hooks/useCalculator';
 import { useCallback, useContext } from 'react';
 
 type ButtonProps = {
@@ -9,6 +10,7 @@ type ButtonProps = {
 
 const Button = ({ value, category }: ButtonProps) => {
 	const { setNumber, setAction, setOperator } = useContext(CalculatorContext);
+  const { expVerify, operatorList } = useCalculator();
 	const textColor = category === 'action' ? 'text-black-100' : '';
 	const bgColor =
 		category === 'action' ? 'bg-gray-100' : category === 'operation' ? 'bg-orange-100' : '';
@@ -21,11 +23,13 @@ const Button = ({ value, category }: ButtonProps) => {
 	const setValue = useCallback(
 		(value: string) => {
 			if (category === 'numeric') {
-          setNumber(prev => setLogicNumber(prev, value));
+        expVerify();
+				setNumber(prev => setLogicNumber(prev, value));
 			} else if (category === 'action') {
 				setAction(value);
 			} else {
 				setOperator(value);
+        operatorList.current.push(value);
 			}
 		},
 		[value]

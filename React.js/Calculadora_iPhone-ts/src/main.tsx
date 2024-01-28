@@ -5,9 +5,7 @@ import './index.css';
 import CalculatorProvider from './contexts/CalculatorContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
 		<CalculatorProvider>
 			<App />
 		</CalculatorProvider>
-	</React.StrictMode>
 );
