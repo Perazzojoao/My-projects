@@ -10,7 +10,7 @@ type ButtonProps = {
 
 const Button = ({ value, category }: ButtonProps) => {
 	const { setNumber, setAction, setOperator } = useContext(CalculatorContext);
-  const { expVerify, operatorList } = useCalculator();
+  const { expVerify } = useCalculator();
 	const textColor = category === 'action' ? 'text-black-100' : '';
 	const bgColor =
 		category === 'action' ? 'bg-gray-100' : category === 'operation' ? 'bg-orange-100' : '';
@@ -28,8 +28,7 @@ const Button = ({ value, category }: ButtonProps) => {
 			} else if (category === 'action') {
 				setAction(value);
 			} else {
-				setOperator(value);
-        operatorList.current.push(value);
+				setOperator(prev => [...prev, value]);
 			}
 		},
 		[value]

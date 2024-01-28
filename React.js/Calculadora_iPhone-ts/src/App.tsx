@@ -5,29 +5,34 @@ import { CalculatorContext } from './contexts/CalculatorContext';
 import { useCalculator } from './hooks/useCalculator';
 
 function App() {
-  const { action, setAction, operator } = useContext(CalculatorContext);
-  const { clearScreen, percentage, setExpression, operatorList } = useCalculator();
+	const { action, setAction, operator, number } = useContext(CalculatorContext);
+	const { clearScreen, percentage, negative, setExpression, doTheMath } = useCalculator();
+
+	useEffect(() => {
+		if (action === 'AC') {
+			clearScreen();
+		} else if (action === '%') {
+			percentage();
+		} else if (action === '+/-') {
+      negative();
+    }
+		setAction('');
+	}, [action]);
+
+	useEffect(() => {
+    setExpression();
+    console.log('ok');
+	}, [operator]);
 
   useEffect(() => {
-    if (action === 'AC') {
-      clearScreen();
-    } else if (action === '%') {
-      percentage();
-    }
-    setAction('');
-  }, [action]);
-
-  useEffect(() => {
-    if (operatorList.current[operatorList.current.length - 1] !== '') {
-      setExpression();
-    }
-  }, [operator]);
+    doTheMath();
+  }, [operator, number]);
 
 	return (
-			<div className='container'>
-				<Screen />
-				<KeyBoard />
-			</div>
+		<div className='container'>
+			<Screen />
+			<KeyBoard />
+		</div>
 	);
 }
 

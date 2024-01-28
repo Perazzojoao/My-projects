@@ -1,4 +1,4 @@
 export type TResult = {
-  exp1?: number | null;
-  exp2?: number | null;
+  exp1: number;
+  exp2?: number;
 }

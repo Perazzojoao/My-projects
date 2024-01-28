@@ -1,14 +1,13 @@
 import { TResult } from "@/types/TResult";
 
-export function calculo(operador: string, { exp1, exp2 }: TResult) {
-  let resultado: null | number = null;
-  if (!exp1 || !exp2) return null;
-  console.log('Entrando...');
-	switch (operador) {
+export function calculo(operador: string[], { exp1, exp2 }: TResult) {
+  let resultado: number = 0;
+  if (!exp1 || !exp2) return 0;
+	switch (operador[operador.length - 2]) {
 		case '/':
 			resultado = exp1 / exp2;
 			break;
-		case '*':
+		case 'X':
 			resultado = exp1 * exp2;
 			break;
 		case '-':
@@ -16,7 +15,6 @@ export function calculo(operador: string, { exp1, exp2 }: TResult) {
 			break;
 		case '+':
 			resultado = exp1 + exp2;
-      console.log('calculando...');
 			break;
 	}
 	return resultado;
