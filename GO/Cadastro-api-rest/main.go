@@ -1,7 +1,11 @@
 package main
 
-import "cadastro-api/routes"
+import (
+	"cadastro-api/database"
+	"cadastro-api/routes"
+)
 
 func main() {
+	database.DBConnection()
 	routes.ServerInit()
 }

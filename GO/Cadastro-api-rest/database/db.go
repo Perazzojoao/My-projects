@@ -6,6 +6,8 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"cadastro-api/models"
 )
 
 var (
@@ -20,4 +22,5 @@ func DBConnection() {
 		fmt.Println("Erro ao conectar com database")
 		log.Panic(err.Error())
 	}
+	DB.AutoMigrate(&models.User{})
 }

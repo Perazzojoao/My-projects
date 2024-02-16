@@ -20,3 +20,21 @@ services:
       - "54321:80"
     depends_on:
       - postgres
+  
+  api:
+    build: .
+    container_name: rest-api
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DB=root
+      - DB_HOST=postgres
+      - DB_TABLE=postgres
+      - DB_PORT=5432
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pgadmin-compose
+
+volumes:
+  postgres:
