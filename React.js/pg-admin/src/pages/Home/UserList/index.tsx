@@ -7,17 +7,18 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getAllUsers } from "@/http/Requests";
-import IRequestData from "@/types/IRequestData";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import User from './User/index';
+import useDBData from "@/hooks/useDBData";
 
 const UserList = () => {
-  const [userList, setUserList] = useState([{} as IRequestData]);
+  const { userList, saveUserList } = useDBData()
 
   useEffect(() => {
+    console.log("ok");
     getAllUsers()
       .then((resp) => (
-        setUserList(resp)
+        saveUserList(resp)
       ))
       .catch(err => {
         console.log(err);

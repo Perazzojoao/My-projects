@@ -26,7 +26,7 @@ const User = ({ user, i }: UserProps) => {
       <TableCell>{password}</TableCell>
       <TableCell className="flex justify-center gap-2">
         <Button variant="secondary" className="bg-orange-500 hover:bg-orange-400">Editar</Button>
-        <Button onClick={onDelete} variant="secondary" className="bg-red-600 hover:bg-red-00">Deletar</Button>
+        <Button onClick={onDelete} variant="secondary" className="bg-red-600 hover:bg-red-500">Deletar</Button>
       </TableCell>
     </TableRow>
   );

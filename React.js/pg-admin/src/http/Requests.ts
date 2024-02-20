@@ -11,6 +11,15 @@ export const getAllUsers = async () => {
 	}
 };
 
+export const getUser = async (ID: number) => {
+	try {
+		return (await axios.get<IRequestData>(`http://localhost:8080/api/usuarios/${ID}`)).data;
+	} catch (error) {
+		console.error(error);
+		return {} as IRequestData;
+	}
+};
+
 export const addUser = async (data: FieldValues) => {
 	try {
 		const res = await axios.post('http://localhost:8080/api/usuarios', data);
@@ -29,4 +38,14 @@ export const deleteUser = async (ID: number) => {
 	} catch (error) {
 		console.log(error);
 	}
+}
+
+export const login = async (json: FieldValues) => {
+	var resp: object = {found: false}
+	try {
+		resp = (await axios.post<JSON>('http://localhost:8080/api/login', json)).data
+	} catch (error) {
+		console.log(error);
+	}
+	return resp
 }

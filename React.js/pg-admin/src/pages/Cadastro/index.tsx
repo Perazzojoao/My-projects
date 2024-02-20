@@ -11,7 +11,7 @@ const Cadastro = () => {
 
   return (
     <PgContainer>
-      <Form handleSubmit={handleSubmit} >
+      <Form type='cadastro' handleSubmit={handleSubmit} >
         <Campo label='Nome' name='nome' register={register} />
         <Campo label='Cpf' name='cpf' register={register} />
         <Campo label='Email' name='email' register={register} />
