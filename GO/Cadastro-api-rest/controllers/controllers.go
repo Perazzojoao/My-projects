@@ -83,3 +83,27 @@ func EditUser(c *gin.Context) {
 	database.DB.Model(&u).UpdateColumns(u)
 	c.JSON(http.StatusOK, u)
 }
+
+func Autenticate(c *gin.Context) {
+	var l models.Login
+	err := c.ShouldBindJSON(&l)
+	if err != nil {
+		log.Println("Erro: json não recebido.")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+	var u models.User
+	database.DB.Where(&models.User{Email: l.Email, Password: l.Password}).First(&u)
+	if u.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"found": false,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"found": true,
+	})
+
+}
