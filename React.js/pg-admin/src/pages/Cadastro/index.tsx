@@ -1,13 +1,23 @@
+import { useForm } from 'react-hook-form';
+import Campo from '@/components/Campo';
+import Form from '@/components/Form';
+import PgContainer from '@/components/PgContainer';
+
 const Cadastro = () => {
+  const {
+    register,
+    handleSubmit,
+  } = useForm();
+
   return (
-    <div className="mt-40 flex justify-center">
-      <form action="#" className="bg-zinc-800 p-8 flex flex-col justify-center gap-4">
-        <input type="text" name="nome" />
-        <input type="text" name="cpf" />
-        <input type="text" name="email" />
-        <input type="text" name="senha" />
-      </form>
-    </div>
+    <PgContainer>
+      <Form handleSubmit={handleSubmit} >
+        <Campo label='Nome' name='nome' register={register} />
+        <Campo label='Cpf' name='cpf' register={register} />
+        <Campo label='Email' name='email' register={register} />
+        <Campo label='Senha' name='password' register={register} type='password' />
+      </Form>
+    </PgContainer>
   );
 }
 

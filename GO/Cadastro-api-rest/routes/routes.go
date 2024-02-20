@@ -5,6 +5,7 @@ import (
 
 	"cadastro-api/controllers"
 	"cadastro-api/middlewares"
+
 )
 
 func ServerInit() {
