@@ -18,7 +18,11 @@ var (
 )
 
 func DBConnection() {
-	godotenv.Load()
+	err = godotenv.Load()
+	if err != nil {
+		log.Panic(err.Error())
+	}
+
 	dns := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=5432 sslmode=disable", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
 	DB, err = gorm.Open(postgres.Open(dns))
 	if err != nil {

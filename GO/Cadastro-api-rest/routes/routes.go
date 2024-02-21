@@ -5,7 +5,6 @@ import (
 
 	"cadastro-api/controllers"
 	"cadastro-api/middlewares"
-
 )
 
 func ServerInit() {
@@ -17,5 +16,5 @@ func ServerInit() {
 	r.POST("/api/login", controllers.Autenticate)
 	r.DELETE("/api/usuarios/:id", controllers.DeleteUser)
 	r.PUT("/api/usuarios/:id", controllers.EditUser)
-	r.Run()
+	r.Run(":8080")
 }
