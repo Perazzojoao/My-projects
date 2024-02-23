@@ -37,7 +37,6 @@ services:
       - DB_PORT=5432
     ports:
       - "8080:8080"
-    command: go run cmd/main.go -b 0.0.0.0
     depends_on:
       - pgadmin-compose
 
