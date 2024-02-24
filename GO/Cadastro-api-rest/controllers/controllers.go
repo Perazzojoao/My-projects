@@ -23,7 +23,7 @@ func GetUser(c *gin.Context) {
 	database.DB.First(&u, id)
 	if u.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"Not found": "Id not found.",
+			"error": "Id not found.",
 		})
 		return
 	}
@@ -36,11 +36,25 @@ func AddUser(c *gin.Context) {
 	if err != nil {
 		log.Println("Erro: json não recebido.")
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Error": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
+
+	if err = models.ValidaUser(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Create(&u)
+	if u.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Usuário já cadastrado.",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, u)
 }
 
@@ -51,13 +65,13 @@ func DeleteUser(c *gin.Context) {
 	database.DB.First(&u, id)
 	if u.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"Not found": "Id não encontrado.",
+			"error": "Id não encontrado.",
 		})
 		return
 	}
 	database.DB.Delete(&u, id)
 	c.JSON(http.StatusOK, gin.H{
-		"DELETE": "User id = " + id + " deletado com sucesso.",
+		"delete": "User id = " + id + " deletado com sucesso.",
 	})
 }
 
@@ -68,7 +82,7 @@ func EditUser(c *gin.Context) {
 	database.DB.First(&u, id)
 	if u.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
-			"Not found": "Id não encontrado.",
+			"error": "Id não encontrado.",
 		})
 		return
 	}
@@ -76,11 +90,25 @@ func EditUser(c *gin.Context) {
 	if err != nil {
 		log.Println("Erro: json não recebido.")
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Error": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
-	database.DB.Model(&u).UpdateColumns(u)
+
+	if err = models.ValidaUser(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	tx := database.DB.Model(&u).UpdateColumns(u)
+	if tx.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Erro ao atualizar usuário. Cpf ou email já cadastrados!",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, u)
 }
 
@@ -90,7 +118,7 @@ func Autenticate(c *gin.Context) {
 	if err != nil {
 		log.Println("Erro: json não recebido.")
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Error": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
@@ -105,5 +133,4 @@ func Autenticate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"found": true,
 	})
-
 }

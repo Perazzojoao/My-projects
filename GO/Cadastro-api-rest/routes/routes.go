@@ -9,6 +9,7 @@ import (
 
 func ServerInit() {
 	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 	r.Use(middlewares.CORS())
 	r.GET("/api/usuarios", controllers.GetAllUsers)
 	r.GET("/api/usuarios/:id", controllers.GetUser)
