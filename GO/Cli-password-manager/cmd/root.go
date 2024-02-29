@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"password-dcrypt/cmd/decrypt"
 	"password-dcrypt/cmd/generate"
 )
 
@@ -35,14 +36,14 @@ func Execute() {
 
 func addSubCommands() {
 	rootCmd.AddCommand(generate.GenerateCmd)
+	rootCmd.AddCommand(decrypt.DecryptCmd)
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	viper.SetDefault("key", "1234567890123456")
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.password-manager.yaml)")
-
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	addSubCommands()
 }

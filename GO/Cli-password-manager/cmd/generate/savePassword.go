@@ -8,7 +8,12 @@ import (
 
 func SalvarSenha(senha string) {
 	if encriptar {
-		senha = Encrypt(senha)
+		var err error
+		senha, err = Encrypt(senha)
+		if err != nil {
+			fmt.Println(cores.Color(cores.Red, err.Error()))
+			return
+		}
 	}
 	file, err := os.OpenFile("senhas.txt", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
