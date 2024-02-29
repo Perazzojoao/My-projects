@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 
 	"cadastro-api/database"
 	"cadastro-api/models"
@@ -48,6 +49,16 @@ func AddUser(c *gin.Context) {
 		return
 	}
 
+	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println("Erro: Hash não gerado.")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	u.Password = string(hash)
+
 	database.DB.Create(&u)
 	if u.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -55,6 +66,18 @@ func AddUser(c *gin.Context) {
 		})
 		return
 	}
+
+	tokenString, err := GenerateToken(c, &u)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Enviando token no cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("session_token", tokenString, 1800, "/", "", false, true)
 	c.JSON(http.StatusOK, u)
 }
 
@@ -110,27 +133,4 @@ func EditUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, u)
-}
-
-func Autenticate(c *gin.Context) {
-	var l models.Login
-	err := c.ShouldBindJSON(&l)
-	if err != nil {
-		log.Println("Erro: json não recebido.")
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	var u models.User
-	database.DB.Where(&models.User{Email: l.Email, Password: l.Password}).First(&u)
-	if u.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"found": false,
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"found": true,
-	})
 }
