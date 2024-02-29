@@ -1,0 +1,6 @@
+{
+  "go.toolsEnvVars": {
+    "GOBIN": "D:\\Users\\peraz\\go\\bin",
+    "GOPATH": "D:/Users/peraz/go"
+  }
+}
