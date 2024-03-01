@@ -45,7 +45,7 @@ var DecryptCmd = &cobra.Command{
 		dateList, timeList := file.GetTimeLogs()
 		allPasswords := file.DecryptAllPasswords(secretKey)
 		for i, password := range allPasswords {
-			fmt.Println(cores.Color(cores.Yellow, dateList[i]+" "+timeList[i]+" -"), cores.Color(cores.Cyan, password))
+			fmt.Println(cores.Color(cores.Yellow, dateList[i]+" "+timeList[i]+" -"), cores.Color(cores.Purple, file.NameList[i]), cores.Color(cores.Cyan, password))
 		}
 		println()
 	},

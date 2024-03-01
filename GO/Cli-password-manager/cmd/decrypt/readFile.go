@@ -6,11 +6,11 @@ import (
 	"os"
 	"strings"
 	"sync"
-
 )
 
 type fullFile struct {
 	Path          string
+	NameList      []string
 	HashPasswords []string
 	Lines         []string
 }
@@ -34,6 +34,7 @@ func ReadFile(filePath string) (*fullFile, error) {
 
 	fileStruct := &fullFile{
 		Path:          filePath,
+		NameList:      GetNameList(lines),
 		HashPasswords: getAllHashes(lines),
 		Lines:         lines,
 	}
@@ -70,6 +71,15 @@ func getTimeLog(line string) (string, string) {
 	date := arguments[0]
 	time := arguments[1]
 	return date, time
+}
+
+func GetNameList(lines []string) []string {
+	names := make([]string, len(lines))
+	for i, line := range lines {
+		arguments := strings.Split(line, " ")
+		names[i] = arguments[2]
+	}
+	return names
 }
 
 func (f *fullFile) DecryptAllPasswords(key string) []string {
