@@ -8,7 +8,6 @@ import (
 	"io"
 
 	"github.com/spf13/viper"
-
 )
 
 func Encrypt(stringToEncrypt string) (string, error) {
@@ -29,5 +28,9 @@ func Encrypt(stringToEncrypt string) (string, error) {
 	stream := cipher.NewCFBEncrypter(block, iv)
 	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
 
-	return string(base64.StdEncoding.EncodeToString(ciphertext)), nil
+	return encode(ciphertext), nil
+}
+
+func encode(ciphertext []byte) string {
+	return base64.StdEncoding.EncodeToString(ciphertext)
 }

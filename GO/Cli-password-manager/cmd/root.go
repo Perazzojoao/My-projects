@@ -45,7 +45,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.password-manager.yaml)")
 
-	addSubCommands()
+	defer addSubCommands()
 }
 
 // initConfig reads in config file and ENV variables if set.

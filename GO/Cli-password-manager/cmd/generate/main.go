@@ -6,7 +6,7 @@ package generate
 import (
 	"fmt"
 	"math/rand"
-	"os"
+	"sync"
 	"time"
 
 	"github.com/atotto/clipboard"
@@ -28,17 +28,12 @@ var GenerateCmd = &cobra.Command{
 	Short: "Gera senhas aleatórias",
 	Long:  `Gera senhas aleatórias de acordo com o tamanho informado e salva no em um arquivo. O tamanho padrão é 12.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if encriptar && !save {
-			fmt.Println(`A flag "encriptar" só pode ser usada em conjunto com a flag "salvar"`)
-			os.Exit(1)
-		}
-
 		senha := gerarSenha(int(tamanho))
 		fmt.Println(cores.Color(cores.Green, "Senha gerada:"), cores.Color(cores.Cyan, senha))
 		fmt.Println(cores.Color(cores.Yellow, "Senha copiada para a área de transferência!"))
 		println()
 
-		if save {
+		if save || encriptar {
 			SalvarSenha(senha)
 		}
 	},
@@ -56,11 +51,20 @@ func gerarSenha(tamanho int) string {
 	senha[1] = numeros[random.Intn(len(numeros))]
 	senha[2] = especiais[random.Intn(len(especiais))]
 
+	mx := sync.Mutex{}
+	wg := sync.WaitGroup{}
+	wg.Add(tamanho - 3)
 	todosCaracteres := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*")
 	for i := 3; i < tamanho; i++ {
-		senha[i] = todosCaracteres[random.Intn(len(todosCaracteres))]
+		go func() {
+			mx.Lock()
+			senha[i] = todosCaracteres[random.Intn(len(todosCaracteres))]
+			mx.Unlock()
+			wg.Done()
+		}()
 	}
 
+	wg.Wait()
 	random.Shuffle(len(senha), func(i, j int) {
 		senha[i], senha[j] = senha[j], senha[i]
 	})
@@ -75,6 +79,7 @@ func gerarSenha(tamanho int) string {
 func init() {
 	GenerateCmd.Flags().IntVarP(&tamanho, "tamanho", "t", 12, "Tamanho da senha")
 	GenerateCmd.Flags().BoolVarP(&save, "salvar", "s", false, "Salvar senha em arquivo .txt")
-	GenerateCmd.Flags().BoolVarP(&encriptar, "encriptar", "e", false, "Encriptar senha salva em arquivo .txt")
+	GenerateCmd.Flags().BoolVarP(&encriptar, "encriptar", "e", false, "Encriptar e salvar senha em arquivo .txt")
+	GenerateCmd.MarkFlagsMutuallyExclusive("salvar", "encriptar")
 
 }
