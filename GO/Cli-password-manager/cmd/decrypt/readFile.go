@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+
 )
 
 type fullFile struct {
@@ -64,6 +65,13 @@ func getAllHashes(lines []string) []string {
 	return hashes
 }
 
+func getTimeLog(line string) (string, string) {
+	arguments := strings.Split(line, " ")
+	date := arguments[0]
+	time := arguments[1]
+	return date, time
+}
+
 func (f *fullFile) DecryptAllPasswords(key string) []string {
 	decryptedPasswords := make([]string, len(f.HashPasswords))
 
@@ -81,13 +89,6 @@ func (f *fullFile) DecryptAllPasswords(key string) []string {
 		decryptedPasswords[i] = string(decrypted)
 	}
 	return decryptedPasswords
-}
-
-func getTimeLog(line string) (string, string) {
-	arguments := strings.Split(line, " ")
-	date := arguments[0]
-	time := arguments[1]
-	return date, time
 }
 
 func (f *fullFile) GetTimeLogs() ([]string, []string) {
