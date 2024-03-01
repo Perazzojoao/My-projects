@@ -9,6 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"password-dcrypt/cmd/decrypt"
+	"password-dcrypt/cmd/generate"
 )
 
 var cfgFile string
@@ -16,7 +19,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "password-manager",
-	Short: "A password manager for the user.",
+	Short: "A password manager for the user",
 	Long: `A password manager for the user. It is a simple tool to generate random passwords and save them. 
 You can also provide an encryptation key and decrypt passwords and save them into the clipboard.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -24,8 +27,6 @@ You can also provide an encryptation key and decrypt passwords and save them int
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -33,12 +34,18 @@ func Execute() {
 	}
 }
 
+func addSubCommands() {
+	rootCmd.AddCommand(generate.GenerateCmd)
+	rootCmd.AddCommand(decrypt.DecryptCmd)
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
+	viper.SetDefault("key", "1234567890123456")
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.password-manager.yaml)")
 
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	defer addSubCommands()
 }
 
 // initConfig reads in config file and ENV variables if set.
