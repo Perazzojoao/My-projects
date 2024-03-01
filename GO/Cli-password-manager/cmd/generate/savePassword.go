@@ -22,14 +22,14 @@ func SalvarSenha(senha string) {
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(time.Now().Format("2006-01-02 15:04:05") + " Senha: " + senha + "\n")
+	_, err = file.WriteString(time.Now().Format("2006-01-02 15:04:05") + " " + nome + ": " + senha + "\n")
 	if err != nil {
 		fmt.Println(cores.Color(cores.Red, err.Error()))
 		return
 	}
 
 	if encriptar {
-		fmt.Println(cores.Yellow + "Senha encriptada salva no arquivo senhas.txt" + cores.Reset)
+		fmt.Println(cores.Yellow + "Senha encriptada e salva no arquivo senhas.txt" + cores.Reset)
 		return
 	}
 	fmt.Println(cores.Yellow + "Senha salva no arquivo senhas.txt" + cores.Reset)

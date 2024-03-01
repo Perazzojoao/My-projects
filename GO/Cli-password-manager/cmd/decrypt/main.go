@@ -52,6 +52,7 @@ var DecryptCmd = &cobra.Command{
 }
 
 func desencriptar(hashPassword, key []byte) ([]byte, error) {
+
 	ciphertext, err := Decode(hashPassword)
 	if err != nil {
 		return nil, err
@@ -62,8 +63,8 @@ func desencriptar(hashPassword, key []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if len(ciphertext) < aes.BlockSize {
-		return nil, fmt.Errorf("ciphertext too short")
+	if !isEncoded(ciphertext) {
+		return nil, fmt.Errorf("ciphertext is not encoded")
 	}
 
 	iv := ciphertext[:aes.BlockSize]
@@ -74,6 +75,10 @@ func desencriptar(hashPassword, key []byte) ([]byte, error) {
 	stream.XORKeyStream(ciphertext, ciphertext)
 
 	return ciphertext, nil
+}
+
+func isEncoded(ciphertext []byte) bool {
+	return len(ciphertext) >= aes.BlockSize
 }
 
 func init() {

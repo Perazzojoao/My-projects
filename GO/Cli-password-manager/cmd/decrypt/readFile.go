@@ -68,6 +68,11 @@ func (f *fullFile) DecryptAllPasswords(key string) []string {
 	decryptedPasswords := make([]string, len(f.HashPasswords))
 
 	for i, hash := range f.HashPasswords {
+		if !isEncoded([]byte(hash)) {
+			decryptedPasswords[i] = hash
+			continue
+		}
+
 		decrypted, err := desencriptar([]byte(hash), []byte(key))
 		if err != nil {
 			fmt.Println(cores.Color(cores.Red, err.Error()))

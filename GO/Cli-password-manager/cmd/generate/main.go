@@ -19,15 +19,24 @@ var (
 	tamanho   int
 	save      bool
 	encriptar bool
+	nome      string
 	cores     = estilos.Styles
 )
 
 // generateCmd represents the generate command
 var GenerateCmd = &cobra.Command{
-	Use:   "gerar",
-	Short: "Gera senhas aleatórias",
-	Long:  `Gera senhas aleatórias de acordo com o tamanho informado e salva no em um arquivo. O tamanho padrão é 12.`,
+	Use:       "gerar",
+	Short:     "Gera senhas aleatórias",
+	Long:      `Gera senhas aleatórias de acordo com o tamanho informado e salva no em um arquivo. O tamanho padrão é 12.`,
+	ValidArgs: []string{"[nome]"},
+	Args:      cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			nome = args[0]
+		} else {
+			nome = "Senha"
+		}
+
 		senha := gerarSenha(int(tamanho))
 		fmt.Println(cores.Color(cores.Green, "Senha gerada:"), cores.Color(cores.Cyan, senha))
 		fmt.Println(cores.Color(cores.Yellow, "Senha copiada para a área de transferência!"))
