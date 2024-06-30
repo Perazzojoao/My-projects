@@ -2,7 +2,6 @@ import { DatabaseService } from 'src/database/database.service';
 import { UserEntity } from '../entities/user.entity';
 import { UsersAbstractRepository } from './users.abstract.repository';
 import { Injectable } from '@nestjs/common';
-import { PersonalInfo, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersRepository implements UsersAbstractRepository {
@@ -40,6 +39,10 @@ export class UsersRepository implements UsersAbstractRepository {
       where: { id },
       include: { address: true, personalInfo: true },
     });
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return await this.prisma.user.findUnique({ where: { email } });
   }
 
   async update(

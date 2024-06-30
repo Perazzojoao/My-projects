@@ -8,8 +8,8 @@ import { UserEntity } from './entities/user.entity';
 export class UsersService {
   constructor(private readonly userRepository: UsersAbstractRepository) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const newUser = new UserEntity(createUserDto as UserEntity);
+  async create(userEntity: UserEntity) {
+    const newUser = new UserEntity(userEntity);
     return await this.userRepository.createUser(newUser);
   }
 
@@ -22,16 +22,15 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, userEntity: UserEntity) {
     const user = await this.findOne(id);
 
-    Object.assign(user, updateUserDto as UserEntity);
+    Object.assign(user, userEntity);
 
-    return await this.userRepository.update(id, {...user});
+    return await this.userRepository.update(id, { ...user });
   }
 
   async remove(id: number) {

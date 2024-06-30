@@ -12,6 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { IsCpf } from '../validations/cpf/cpf.decorator';
+import { EmailUnique } from '../validations/email/email-unique.decorator';
 export enum Role {
   ADMIN = 'ADMIN',
   SECRE = 'SECRE',
@@ -65,6 +66,7 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: 'O campo email é obrigatório' })
   @IsEmail({}, { message: 'O campo email deve ser um email válido' })
+  @EmailUnique({ message: 'O email informado já está em uso' })
   email: string;
 
   @IsNotEmpty({ message: 'O campo password é obrigatório' })
