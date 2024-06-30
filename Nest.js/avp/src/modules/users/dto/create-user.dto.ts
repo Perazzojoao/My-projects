@@ -13,7 +13,8 @@ import {
 } from 'class-validator';
 import { IsCpf } from '../validations/cpf/cpf.decorator';
 import { EmailUnique } from '../validations/email/email-unique.decorator';
-export enum Role {
+
+export enum UserRole {
   ADMIN = 'ADMIN',
   SECRE = 'SECRE',
   COORD = 'COORD',
@@ -77,8 +78,8 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty({ message: 'O campo role é obrigatório' })
-  @IsEnum(Role, { message: 'O campo role deve ser um valor válido' })
-  role: Role;
+  @IsEnum(UserRole, { message: 'O campo role deve ser um valor válido' })
+  role: UserRole;
 
   @ValidateNested()
   @IsNotEmpty({ message: 'O campo personalInfo é obrigatório' })

@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UserRole } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersAbstractRepository } from './repositories/users.abstract.repository';
 import { UserEntity } from './entities/user.entity';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,10 @@ export class UsersService {
     return await this.userRepository.createUser(newUser);
   }
 
-  async findAll() {
+  async findAll(role: string) {
+    if (role in UserRole) {
+      return await this.userRepository.findAll(role);
+    }
     return await this.userRepository.findAll();
   }
 

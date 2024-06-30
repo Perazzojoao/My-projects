@@ -2,6 +2,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { UserEntity } from '../entities/user.entity';
 import { UsersAbstractRepository } from './users.abstract.repository';
 import { Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class UsersRepository implements UsersAbstractRepository {
@@ -25,8 +26,9 @@ export class UsersRepository implements UsersAbstractRepository {
     });
   }
 
-  async findAll(): Promise<Promise<UserEntity[]>> {
+  async findAll(role?: Role): Promise<Promise<UserEntity[]>> {
     return await this.prisma.user.findMany({
+      where: role ? { role } : {},
       include: {
         address: true,
         personalInfo: true,
