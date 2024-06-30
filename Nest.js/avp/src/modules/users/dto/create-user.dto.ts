@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { IsCpf } from '../validations/cpf/cpf.decorator';
 import { EmailUnique } from '../validations/email/email-unique.decorator';
+import { AdminUnique } from '../validations/admin/admin-unique.decorator';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -77,8 +78,8 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsNotEmpty({ message: 'O campo role é obrigatório' })
   @IsEnum(UserRole, { message: 'O campo role deve ser um valor válido' })
+  @AdminUnique({ message: 'Já existe um administrador cadastrado' })
   role: UserRole;
 
   @ValidateNested()
