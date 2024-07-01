@@ -8,7 +8,7 @@ import { Role } from '@prisma/client';
 export class UsersRepository implements UsersAbstractRepository {
   constructor(private readonly prisma: DatabaseService) {}
 
-  async createUser(userEntity: UserEntity): Promise<Promise<UserEntity>> {
+  async createUser(userEntity: UserEntity) {
     return await this.prisma.user.create({
       data: {
         ...userEntity,
@@ -26,7 +26,7 @@ export class UsersRepository implements UsersAbstractRepository {
     });
   }
 
-  async findAll(role?: Role): Promise<Promise<UserEntity[]>> {
+  async findAll(role?: Role): Promise<UserEntity[]> {
     return await this.prisma.user.findMany({
       where: role ? { role } : {},
       include: {
@@ -50,7 +50,7 @@ export class UsersRepository implements UsersAbstractRepository {
   async update(
     id: number,
     userEntity: Partial<UserEntity>,
-  ): Promise<Promise<UserEntity>> {
+  ): Promise<UserEntity> {
     const { address, personalInfo, ...user } = userEntity;
     const { id: addressId, userId: addressUserId, ...addressData } = address;
     const { id: personalInfoId, userId, ...personalInfoData } = personalInfo;

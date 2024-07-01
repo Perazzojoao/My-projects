@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UserRole } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { UserRole } from './dto/create-user.dto';
 import { UsersAbstractRepository } from './repositories/users.abstract.repository';
 import { UserEntity } from './entities/user.entity';
-import { Role } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +24,10 @@ export class UsersService {
   }
 
   async findOne(id: number) {
+    if (!id) {
+      throw new BadRequestException('Invalid user id');
+    }
+
     const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -30,14 +36,26 @@ export class UsersService {
   }
 
   async update(id: number, userEntity: UserEntity) {
-    const user = await this.findOne(id);
+    if (!id) {
+      throw new BadRequestException('Invalid user id');
+    }
 
+    const user = await this.findOne(id);
     Object.assign(user, userEntity);
 
     return await this.userRepository.update(id, { ...user });
   }
 
   async remove(id: number) {
+    if (!id) {
+      throw new BadRequestException('Invalid user id');
+    }
+
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     return await this.userRepository.remove(id);
   }
 }

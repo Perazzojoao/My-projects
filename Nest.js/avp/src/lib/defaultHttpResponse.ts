@@ -1,7 +1,11 @@
-import { HttpStatus } from "@nestjs/common";
+import { HttpStatus } from '@nestjs/common';
 
 export class DefaultHttpResponse {
-  public success(statusCode: HttpStatus, message: string, data?: any) {
+  public success(data: unknown, message: string, statusCode?: HttpStatus) {
+    if (!statusCode) {
+      statusCode = HttpStatus.OK;
+    }
+
     return {
       statusCode,
       message,
