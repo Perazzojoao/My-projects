@@ -8,7 +8,7 @@ import {
   Delete,
   HttpStatus,
   Query,
-  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +16,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DefaultHttpResponse } from 'src/lib/defaultHttpResponse';
 import { UserEntity } from './entities/user.entity';
 import { PasswordHashPipe } from 'src/resources/pipes/password-hash.pipe';
-import { AuthGuard } from 'src/resources/guards/auth.guard';
+import { RequestWithUser } from 'src/resources/guards/auth.guard';
+import { Roles } from 'src/resources/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController extends DefaultHttpResponse {
@@ -39,7 +40,7 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @Roles(['ADMIN'])
   async findAll(@Query('role') role: string) {
     const user = (await this.usersService.findAll(role)).map(
       ({ password, ...rest }) => rest,
@@ -48,29 +49,28 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
-  async findOne(@Param('id') id: string) {
-    const { password, ...rest } = await this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string, @Req() { user }: RequestWithUser) {
+    const { password, ...rest } = await this.usersService.findOne(+id, user);
     return this.success(rest, 'User fetched successfully');
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: Partial<UpdateUserDto>,
+    @Req() { user }: RequestWithUser,
   ) {
     const { password, ...rest } = await this.usersService.update(
       +id,
       updateUserDto as UserEntity,
+      user,
     );
     return this.success(rest, 'User updated successfully');
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
-  async remove(@Param('id') id: string) {
-    const { id: userId, name, email } = await this.usersService.remove(+id);
+  async remove(@Param('id') id: string, @Req() { user }: RequestWithUser) {
+    const { id: userId, name, email } = await this.usersService.remove(+id, user);
     return this.success({ userId, name, email }, 'User deleted successfully');
   }
 }

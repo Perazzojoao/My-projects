@@ -1,12 +1,13 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { UserRole } from './dto/create-user.dto';
 import { UsersAbstractRepository } from './repositories/users.abstract.repository';
 import { UserEntity } from './entities/user.entity';
-import { JwtTokenService } from '../../JWT/jwt-token.service';
+import { JwtPayload, JwtTokenService } from '../../JWT/jwt-token.service';
 
 @Injectable()
 export class UsersService {
@@ -34,9 +35,15 @@ export class UsersService {
     return await this.userRepository.findAll();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userPayload?: JwtPayload) {
     if (!id) {
       throw new BadRequestException('Invalid user id');
+    }
+
+    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(
+        'You do not have permission to access this resource',
+      );
     }
 
     const user = await this.userRepository.findOne(id);
@@ -54,9 +61,15 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, userEntity: UserEntity) {
+  async update(id: number, userEntity: UserEntity, userPayload: JwtPayload) {
     if (!id) {
       throw new BadRequestException('Invalid user id');
+    }
+
+    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(
+        'You do not have permission to access this resource',
+      );
     }
 
     const user = await this.findOne(id);
@@ -65,9 +78,15 @@ export class UsersService {
     return await this.userRepository.update(id, { ...user });
   }
 
-  async remove(id: number) {
+  async remove(id: number, userPayload: JwtPayload) {
     if (!id) {
       throw new BadRequestException('Invalid user id');
+    }
+
+    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(
+        'You do not have permission to access this resource',
+      );
     }
 
     const user = await this.findOne(id);
