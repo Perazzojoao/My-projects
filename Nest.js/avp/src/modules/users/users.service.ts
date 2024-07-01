@@ -6,14 +6,25 @@ import {
 import { UserRole } from './dto/create-user.dto';
 import { UsersAbstractRepository } from './repositories/users.abstract.repository';
 import { UserEntity } from './entities/user.entity';
+import { JwtTokenService } from '../../JWT/jwt-token.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UsersAbstractRepository) {}
+  constructor(
+    private readonly userRepository: UsersAbstractRepository,
+    private readonly jwtTokenService: JwtTokenService,
+  ) {}
 
   async create(userEntity: UserEntity) {
     const newUser = new UserEntity(userEntity);
-    return await this.userRepository.createUser(newUser);
+    const user = await this.userRepository.createUser(newUser);
+    if (!user) {
+      throw new BadRequestException('User not created');
+    }
+
+    const token = await this.jwtTokenService.generateToken(user);
+    const { password, ...rest } = user;
+    return { token, user: rest };
   }
 
   async findAll(role: string) {
@@ -29,6 +40,14 @@ export class UsersService {
     }
 
     const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.userRepository.findOneByEmail(email);
     if (!user) {
       throw new NotFoundException('User not found');
     }

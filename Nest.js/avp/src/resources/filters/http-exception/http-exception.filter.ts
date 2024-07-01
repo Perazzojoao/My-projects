@@ -7,6 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { cyan, red } from 'colors';
 
 @Catch()
 export class HttpExceptionFilter<T> implements ExceptionFilter {
@@ -21,6 +22,8 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
     const context = host.switchToHttp();
     const response = context.getResponse();
     const request = context.getRequest();
+    const method = httpAdapter.getRequestMethod(request);
+    const path = httpAdapter.getRequestUrl(request);
 
     const { status, body } =
       exception instanceof HttpException
@@ -33,11 +36,14 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
             body: {
               statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
               timestamp: new Date().toISOString(),
-              path: httpAdapter.getRequestUrl(request),
+              path: path,
             },
           };
 
-    this.logger.error(exception, 'ExceptionFilter');
+    this.logger.error(
+      `${method + ' ' + path} - ${exception}`,
+      'ExceptionFilter',
+    );
 
     httpAdapter.reply(response, body, status);
   }

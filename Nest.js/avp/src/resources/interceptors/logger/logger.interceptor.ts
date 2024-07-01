@@ -8,6 +8,7 @@ import {
 import { cyan, green, white, yellow } from 'colors';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { RequestWithUser } from 'src/resources/guards/auth.guard';
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
@@ -15,12 +16,12 @@ export class LoggerInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest<Request>();
+    const request = httpContext.getRequest<Request | RequestWithUser>();
     const now = Date.now();
     return next.handle().pipe(
       tap(() => {
         this.logger.log(
-          `${cyan(request.method)} ${cyan(request.url)}: ` +
+          `${request.method} ${request.url}${'user' in request ? ` - User ID: ${request.user.sub}` : ''} ` +
             yellow(`+${Date.now() - now}ms`),
           'Logger',
         );
