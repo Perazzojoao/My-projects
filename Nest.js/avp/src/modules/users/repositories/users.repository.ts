@@ -28,7 +28,9 @@ export class UsersRepository implements UsersAbstractRepository {
 
   async findAll(role?: Role): Promise<UserEntity[]> {
     return await this.prisma.user.findMany({
-      where: role ? { role, isActive: true } : {isActive: true},
+      where: role
+        ? { role, isActive: true, deletedAt: null }
+        : { isActive: true, deletedAt: null},
       include: {
         address: true,
         personalInfo: true,
@@ -38,14 +40,14 @@ export class UsersRepository implements UsersAbstractRepository {
 
   async findOne(id: number): Promise<UserEntity | null> {
     return await this.prisma.user.findUnique({
-      where: { id, isActive: true },
+      where: { id, isActive: true, deletedAt: null },
       include: { address: true, personalInfo: true },
     });
   }
 
   async findOneByEmail(email: string): Promise<UserEntity | null> {
     return await this.prisma.user.findUnique({
-      where: { email },
+      where: { email, deletedAt: null },
       include: { address: true, personalInfo: true },
     });
   }
@@ -59,7 +61,7 @@ export class UsersRepository implements UsersAbstractRepository {
     const { id: personalInfoId, userId, ...personalInfoData } = personalInfo!;
 
     return await this.prisma.user.update({
-      where: { id },
+      where: { id, isActive: true, deletedAt: null},
       data: {
         ...userEntity,
         address: {
@@ -82,7 +84,18 @@ export class UsersRepository implements UsersAbstractRepository {
     });
   }
 
-  async remove(id: number): Promise<UserEntity | null> {
+  async remove(
+    id: number,
+    isActive: boolean = true,
+  ): Promise<UserEntity | null> {
+    if (isActive) {
+      return await this.prisma.user.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+        include: { address: true, personalInfo: true },
+      });
+    }
+
     return await this.prisma.user.delete({
       where: { id },
       include: { address: true, personalInfo: true },

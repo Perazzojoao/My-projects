@@ -6,7 +6,7 @@ export class UserEntity implements User {
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }
-
+  
   id: number;
   name: string;
   email: string;
@@ -15,6 +15,7 @@ export class UserEntity implements User {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt: Date | null;
   personalInfo: PersonalInfoEntity | null;
   address: AddressEntity | null;
 }

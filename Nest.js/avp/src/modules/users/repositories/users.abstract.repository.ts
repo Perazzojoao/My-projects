@@ -6,5 +6,5 @@ export abstract class UsersAbstractRepository {
   abstract findOne(id: number): Promise<UserEntity | null>;
   abstract findOneByEmail(email: string): Promise<UserEntity | null>;
   abstract update(id: number, userEntity: Partial<UserEntity>): Promise<UserEntity>;
-  abstract remove(id: number): Promise<UserEntity | null>;
+  abstract remove(id: number, isActive?: boolean): Promise<UserEntity | null>;
 }
