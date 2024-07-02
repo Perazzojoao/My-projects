@@ -11,8 +11,8 @@ export class UserEntity implements User {
   createdAt: Date;
   updatedAt: Date;
 
-  personalInfo?: PersonalInfoEntity;
-  address?: AddressEntity;
+  personalInfo: PersonalInfoEntity | null;
+  address: AddressEntity | null;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

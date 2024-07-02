@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LogInDto } from './dto/login.dto';
@@ -35,6 +36,6 @@ export class AuthController extends DefaultHttpResponse {
   async login(@Body() logInDto: LogInDto) {
     const response = await this.authService.login(logInDto);
 
-    return this.success(response, 'Login realizado com sucesso');
+    return this.success(response, 'User logged in successfully');
   }
 }

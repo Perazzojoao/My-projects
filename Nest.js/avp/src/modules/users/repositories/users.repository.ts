@@ -8,15 +8,15 @@ import { Role } from '@prisma/client';
 export class UsersRepository implements UsersAbstractRepository {
   constructor(private readonly prisma: DatabaseService) {}
 
-  async createUser(userEntity: UserEntity) {
+  async createUser(userEntity: UserEntity): Promise<UserEntity> {
     return await this.prisma.user.create({
       data: {
         ...userEntity,
         address: {
-          create: userEntity.address,
+          create: userEntity.address!,
         },
         personalInfo: {
-          create: userEntity.personalInfo,
+          create: userEntity.personalInfo!,
         },
       },
       include: {
@@ -36,15 +36,18 @@ export class UsersRepository implements UsersAbstractRepository {
     });
   }
 
-  async findOne(id: number): Promise<UserEntity> {
+  async findOne(id: number): Promise<UserEntity | null> {
     return await this.prisma.user.findUnique({
       where: { id },
       include: { address: true, personalInfo: true },
     });
   }
 
-  async findOneByEmail(email: string): Promise<UserEntity> {
-    return await this.prisma.user.findUnique({ where: { email } });
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
+    return await this.prisma.user.findUnique({
+      where: { email },
+      include: { address: true, personalInfo: true },
+    });
   }
 
   async update(
@@ -52,8 +55,8 @@ export class UsersRepository implements UsersAbstractRepository {
     userEntity: Partial<UserEntity>,
   ): Promise<UserEntity> {
     const { address, personalInfo, ...user } = userEntity;
-    const { id: addressId, userId: addressUserId, ...addressData } = address;
-    const { id: personalInfoId, userId, ...personalInfoData } = personalInfo;
+    const { id: addressId, userId: addressUserId, ...addressData } = address!;
+    const { id: personalInfoId, userId, ...personalInfoData } = personalInfo!;
 
     return await this.prisma.user.update({
       where: { id },
@@ -61,13 +64,13 @@ export class UsersRepository implements UsersAbstractRepository {
         ...userEntity,
         address: {
           update: {
-            where: { id: userEntity.address.id },
+            where: { id: userEntity.address!.id },
             data: addressData,
           },
         },
         personalInfo: {
           update: {
-            where: { id: userEntity.personalInfo.id },
+            where: { id: userEntity.personalInfo!.id },
             data: personalInfoData,
           },
         },
@@ -79,7 +82,10 @@ export class UsersRepository implements UsersAbstractRepository {
     });
   }
 
-  async remove(id: number): Promise<UserEntity> {
-    return await this.prisma.user.delete({ where: { id } });
+  async remove(id: number): Promise<UserEntity | null> {
+    return await this.prisma.user.delete({
+      where: { id },
+      include: { address: true, personalInfo: true },
+    });
   }
 }

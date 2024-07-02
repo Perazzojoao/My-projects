@@ -40,7 +40,7 @@ export class UsersService {
       throw new BadRequestException('Invalid user id');
     }
 
-    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
+    if (userPayload?.sub !== id && userPayload?.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',
       );
@@ -94,6 +94,10 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return await this.userRepository.remove(id);
+    const targetUser = await this.userRepository.remove(id);
+    if (!targetUser) {
+      throw new NotFoundException('User not found');
+    }
+    return targetUser;
   }
 }
