@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { $Enums } from '@prisma/client';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 
 export interface JwtPayload {
   sub: number;
   email: string;
   name: string;
-  role: string;
+  role: $Enums.Role;
 }
 
 @Injectable()

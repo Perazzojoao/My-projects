@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Query,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,7 @@ import { PasswordHashPipe } from 'src/resources/pipes/password-hash.pipe';
 import { RequestWithUser } from 'src/resources/guards/auth.guard';
 import { Roles } from 'src/resources/decorators/roles.decorator';
 import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
+import { UserPermInterceptor } from 'src/resources/interceptors/user-perm.interceptor';
 
 @Controller('users')
 export class UsersController extends DefaultHttpResponse {
@@ -51,38 +53,29 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', IdParseIntPipe) id: number,
-    @Req() { user }: RequestWithUser,
-  ) {
-    const { password, ...rest } = await this.usersService.findOne(id, user);
+  @UseInterceptors(new UserPermInterceptor())
+  async findOne(@Param('id', IdParseIntPipe) id: number) {
+    const { password, ...rest } = await this.usersService.findOne(id);
     return this.success(rest, 'User fetched successfully');
   }
 
   @Patch(':id')
+  @UseInterceptors(new UserPermInterceptor())
   async update(
     @Param('id', IdParseIntPipe) id: number,
     @Body() updateUserDto: Partial<UpdateUserDto>,
-    @Req() { user }: RequestWithUser,
   ) {
     const { password, ...rest } = await this.usersService.update(
       id,
       updateUserDto as UserEntity,
-      user,
     );
     return this.success(rest, 'User updated successfully');
   }
 
   @Delete(':id')
-  async remove(
-    @Param('id', IdParseIntPipe) id: number,
-    @Req() { user }: RequestWithUser,
-  ) {
-    const {
-      id: userId,
-      name,
-      email,
-    } = await this.usersService.remove(id, user);
+  @UseInterceptors(new UserPermInterceptor())
+  async remove(@Param('id', IdParseIntPipe) id: number) {
+    const { id: userId, name, email } = await this.usersService.remove(id);
     return this.success({ userId, name, email }, 'User deleted successfully');
   }
 }

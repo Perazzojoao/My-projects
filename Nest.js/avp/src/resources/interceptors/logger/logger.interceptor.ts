@@ -5,7 +5,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { cyan, green, white, yellow } from 'colors';
+import { yellow } from 'colors';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { RequestWithUser } from 'src/resources/guards/auth.guard';

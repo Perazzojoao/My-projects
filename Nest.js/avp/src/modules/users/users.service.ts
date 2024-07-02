@@ -35,13 +35,7 @@ export class UsersService {
     return await this.userRepository.findAll();
   }
 
-  async findOne(id: number, userPayload?: JwtPayload) {
-    if (userPayload?.sub !== id && userPayload?.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(
-        'You do not have permission to access this resource',
-      );
-    }
-
+  async findOne(id: number) {
     const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -57,26 +51,14 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, userEntity: UserEntity, userPayload: JwtPayload) {
-    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(
-        'You do not have permission to access this resource',
-      );
-    }
-
+  async update(id: number, userEntity: UserEntity) {
     const user = await this.findOne(id);
     Object.assign(user, userEntity);
 
     return await this.userRepository.update(id, { ...user });
   }
 
-  async remove(id: number, userPayload: JwtPayload) {
-    if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(
-        'You do not have permission to access this resource',
-      );
-    }
-
+  async remove(id: number) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
