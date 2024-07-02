@@ -26,6 +26,7 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Post()
+  @Roles(['ADMIN'])
   async create(
     @Body() createUserDto: CreateUserDto,
     @Body('password', PasswordHashPipe) hash: string,

@@ -11,6 +11,7 @@ import { DefaultHttpResponse } from 'src/lib/defaultHttpResponse';
 import { PasswordHashPipe } from 'src/resources/pipes/password-hash.pipe';
 import { UserEntity } from '../users/entities/user.entity';
 import { SignUpDto } from './dto/signup.dto';
+import { PublicRoute } from 'src/resources/decorators/public-route.decorator';
 
 @Controller('auth')
 export class AuthController extends DefaultHttpResponse {
@@ -19,6 +20,7 @@ export class AuthController extends DefaultHttpResponse {
   }
 
   @Post('signup')
+  @PublicRoute()
   async signup(
     @Body() signUpDto: SignUpDto,
     @Body('password', PasswordHashPipe) hash: string,
@@ -33,6 +35,7 @@ export class AuthController extends DefaultHttpResponse {
   }
 
   @Post('login')
+  @PublicRoute()
   async login(@Body() logInDto: LogInDto) {
     const response = await this.authService.login(logInDto);
 

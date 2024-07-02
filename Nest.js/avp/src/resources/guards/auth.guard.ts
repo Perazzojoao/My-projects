@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtPayload, JwtTokenService } from '../../JWT/jwt-token.service';
+import { Reflector } from '@nestjs/core';
 
 export interface RequestWithUser extends Request {
   user: JwtPayload;
@@ -13,9 +14,20 @@ export interface RequestWithUser extends Request {
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtTokenService: JwtTokenService) {}
+  constructor(
+    private readonly jwtTokenService: JwtTokenService,
+    private reflector: Reflector,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const ignore = this.reflector.get<boolean>(
+      'public-route',
+      context.getHandler(),
+    );
+    if (ignore) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest<RequestWithUser>();
 
     const token = this.getToken(request);

@@ -1,7 +1,9 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { useContainer } from 'class-validator';
+import { JwtTokenService } from './JWT/jwt-token.service';
+import { AuthGuard } from './resources/guards/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +14,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(3000);
 }
