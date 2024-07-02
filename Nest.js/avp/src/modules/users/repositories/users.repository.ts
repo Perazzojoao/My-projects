@@ -28,7 +28,7 @@ export class UsersRepository implements UsersAbstractRepository {
 
   async findAll(role?: Role): Promise<UserEntity[]> {
     return await this.prisma.user.findMany({
-      where: role ? { role } : {},
+      where: role ? { role, isActive: true } : {isActive: true},
       include: {
         address: true,
         personalInfo: true,
@@ -38,7 +38,7 @@ export class UsersRepository implements UsersAbstractRepository {
 
   async findOne(id: number): Promise<UserEntity | null> {
     return await this.prisma.user.findUnique({
-      where: { id },
+      where: { id, isActive: true },
       include: { address: true, personalInfo: true },
     });
   }
