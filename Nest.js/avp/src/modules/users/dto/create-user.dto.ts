@@ -74,7 +74,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'O campo password é obrigatório' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W+).{6,30}$/, {
     message:
-      'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um dígito, um caractere especial e ter entre 8 e 30 caracteres.',
+      'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um dígito, um caractere especial e ter entre 6 e 30 caracteres.',
   })
   password: string;
 

@@ -36,10 +36,6 @@ export class UsersService {
   }
 
   async findOne(id: number, userPayload?: JwtPayload) {
-    if (!id) {
-      throw new BadRequestException('Invalid user id');
-    }
-
     if (userPayload?.sub !== id && userPayload?.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',
@@ -62,10 +58,6 @@ export class UsersService {
   }
 
   async update(id: number, userEntity: UserEntity, userPayload: JwtPayload) {
-    if (!id) {
-      throw new BadRequestException('Invalid user id');
-    }
-
     if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',
@@ -79,10 +71,6 @@ export class UsersService {
   }
 
   async remove(id: number, userPayload: JwtPayload) {
-    if (!id) {
-      throw new BadRequestException('Invalid user id');
-    }
-
     if (userPayload.sub !== id && userPayload.role !== UserRole.ADMIN) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',

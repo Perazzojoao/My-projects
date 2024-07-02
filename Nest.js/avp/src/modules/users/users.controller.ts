@@ -18,6 +18,7 @@ import { UserEntity } from './entities/user.entity';
 import { PasswordHashPipe } from 'src/resources/pipes/password-hash.pipe';
 import { RequestWithUser } from 'src/resources/guards/auth.guard';
 import { Roles } from 'src/resources/decorators/roles.decorator';
+import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
 
 @Controller('users')
 export class UsersController extends DefaultHttpResponse {
@@ -50,19 +51,22 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Req() { user }: RequestWithUser) {
-    const { password, ...rest } = await this.usersService.findOne(+id, user);
+  async findOne(
+    @Param('id', IdParseIntPipe) id: number,
+    @Req() { user }: RequestWithUser,
+  ) {
+    const { password, ...rest } = await this.usersService.findOne(id, user);
     return this.success(rest, 'User fetched successfully');
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', IdParseIntPipe) id: number,
     @Body() updateUserDto: Partial<UpdateUserDto>,
     @Req() { user }: RequestWithUser,
   ) {
     const { password, ...rest } = await this.usersService.update(
-      +id,
+      id,
       updateUserDto as UserEntity,
       user,
     );
@@ -70,8 +74,15 @@ export class UsersController extends DefaultHttpResponse {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Req() { user }: RequestWithUser) {
-    const { id: userId, name, email } = await this.usersService.remove(+id, user);
+  async remove(
+    @Param('id', IdParseIntPipe) id: number,
+    @Req() { user }: RequestWithUser,
+  ) {
+    const {
+      id: userId,
+      name,
+      email,
+    } = await this.usersService.remove(id, user);
     return this.success({ userId, name, email }, 'User deleted successfully');
   }
 }
