@@ -15,6 +15,9 @@ export class JwtTokenService {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateToken(user: UserEntity) {
+    if (user.isActive === false) {
+      return null;
+    }
     const payload: JwtPayload = {
       email: user.email,
       sub: user.id,

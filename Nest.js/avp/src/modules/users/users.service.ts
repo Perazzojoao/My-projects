@@ -18,6 +18,9 @@ export class UsersService {
 
   async create(userEntity: UserEntity) {
     const newUser = new UserEntity(userEntity);
+    if (newUser.role !== UserRole.STUDENT) {
+      newUser.isActive = true;
+    }
     const user = await this.userRepository.createUser(newUser);
     if (!user) {
       throw new BadRequestException('User not created');

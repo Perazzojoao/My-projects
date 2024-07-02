@@ -20,6 +20,10 @@ export class AuthService {
     const { email, password } = logInDto;
 
     const user = await this.userService.findOneByEmail(email);
+    if (!user.isActive) {
+      throw new UnauthorizedException('Usuário inativo');
+    }
+    
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('E-mail ou senha inválidos');
