@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { cyan, red } from 'colors';
+import { Request } from 'express';
 
 @Catch()
 export class HttpExceptionFilter<T> implements ExceptionFilter {
@@ -21,9 +22,12 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
 
     const context = host.switchToHttp();
     const response = context.getResponse();
-    const request = context.getRequest();
+    const request = context.getRequest<Request>();
     const method = httpAdapter.getRequestMethod(request);
     const path = httpAdapter.getRequestUrl(request);
+
+    const userAgent = request.get('user-agent') || '';
+    const { ip } = request;
 
     const { status, body } =
       exception instanceof HttpException
@@ -41,7 +45,7 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
           };
 
     this.logger.error(
-      `${method + ' ' + path} - ${exception}`,
+      `${userAgent} ${ip}: ${method + ' ' + path} - ${exception}`,
       'ExceptionFilter',
     );
 
