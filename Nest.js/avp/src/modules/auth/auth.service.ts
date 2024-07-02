@@ -25,10 +25,9 @@ export class AuthService {
       throw new UnauthorizedException('E-mail ou senha inválidos');
     }
 
-    const { password: _, ...rest } = user;
     return {
       token: await this.jwtService.generateToken(user),
-      rest,
+      user,
     }
   }
 }

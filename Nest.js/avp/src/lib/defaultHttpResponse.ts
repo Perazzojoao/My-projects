@@ -1,5 +1,10 @@
 import { HttpStatus } from '@nestjs/common';
 
+export interface HttpResponse {
+  statusCode: HttpStatus;
+  message: string;
+  data: unknown;
+}
 export class DefaultHttpResponse {
   public success(data: unknown, message: string, statusCode?: HttpStatus) {
     if (!statusCode) {

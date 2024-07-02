@@ -1,6 +1,7 @@
-import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
+import { SetMetadata, UseGuards, UsePipes, applyDecorators } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { UserCustomPermissionsGuard } from '../guards/user-custom-permissions.guard';
+import { IdParseIntPipe } from '../pipes/id-parse-int.pipe';
 
 /**
  * Custom decorator to set custom permissions and, automatically, use the UserCustomPermissionsGuard, which checks if the user has permission to access the resource.

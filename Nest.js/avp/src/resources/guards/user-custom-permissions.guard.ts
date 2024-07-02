@@ -3,12 +3,12 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { $Enums } from '@prisma/client';
 import { RequestWithUser } from './auth.guard';
-import { CustomPermissions } from '../decorators/custom-permissions.decorator';
 
 @Injectable()
 export class UserCustomPermissionsGuard implements CanActivate {

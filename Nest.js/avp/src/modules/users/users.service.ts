@@ -24,8 +24,7 @@ export class UsersService {
     }
 
     const token = await this.jwtTokenService.generateToken(user);
-    const { password, ...rest } = user;
-    return { token, user: rest };
+    return { token, user };
   }
 
   async findAll(role: string) {
