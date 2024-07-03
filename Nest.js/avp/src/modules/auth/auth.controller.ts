@@ -14,6 +14,8 @@ import { UserEntity } from '../users/entities/user.entity';
 import { SignUpDto } from './dto/signup.dto';
 import { PublicRoute } from 'src/resources/decorators/public-route.decorator';
 import { RemovePasswordInterceptor } from 'src/resources/interceptors/remove-password.interceptor';
+import { StudentOnlyPipe } from './validations/student-only.pipe';
+import { UserRole } from '../users/dto/create-user.dto';
 
 @Controller('auth')
 @UseInterceptors(RemovePasswordInterceptor)
@@ -27,6 +29,7 @@ export class AuthController extends DefaultHttpResponse {
   async signup(
     @Body() signUpDto: SignUpDto,
     @Body('password', PasswordHashPipe) hash: string,
+    @Body('role', StudentOnlyPipe) _: UserRole,
   ) {
     signUpDto.password = hash;
     const newUser = await this.authService.signup(signUpDto as UserEntity);

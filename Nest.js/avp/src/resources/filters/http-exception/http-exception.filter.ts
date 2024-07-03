@@ -23,13 +23,13 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
 
     const context = host.switchToHttp();
     const response = context.getResponse();
-    const request = context.getRequest<Request | RequestWithUser>();
+    const request = context.getRequest<RequestWithUser>();
     const method = httpAdapter.getRequestMethod(request);
     const path = httpAdapter.getRequestUrl(request);
 
     const userAgent = request.get('user-agent') || '';
     const { ip } = request;
-    const userId = (request as RequestWithUser).user.sub || '';
+    const userId = request.user ? request.user.sub : '';
 
     const { status, body } =
       exception instanceof HttpException

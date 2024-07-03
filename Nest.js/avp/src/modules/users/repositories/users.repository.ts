@@ -55,7 +55,7 @@ export class UsersRepository implements UsersAbstractRepository {
 
   async findOneByEmail(email: string): Promise<UserEntity | null> {
     return await this.prisma.user.findUnique({
-      where: { email, deletedAt: null },
+      where: { email },
       include: { address: true, personalInfo: true },
     });
   }
