@@ -32,7 +32,7 @@ export class UsersService {
 
   async findAll(role: string) {
     if (role in UserRole) {
-      return await this.userRepository.findAll(role);
+      return await this.userRepository.findAllByRole(role);
     }
     return await this.userRepository.findAll();
   }
@@ -64,6 +64,14 @@ export class UsersService {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    if (!user.isActive) {
+      const targetUser = await this.userRepository.hardDelete(id);
+      if (!targetUser) {
+        throw new NotFoundException('User not found');
+      }
+      return targetUser;
     }
 
     const targetUser = await this.userRepository.remove(id);

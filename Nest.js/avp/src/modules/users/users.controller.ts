@@ -20,6 +20,7 @@ import { Roles } from 'src/resources/decorators/roles.decorator';
 import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
 import { CustomPermissions } from 'src/resources/decorators/custom-permissions.decorator';
 import { RemovePasswordInterceptor } from 'src/resources/interceptors/remove-password.interceptor';
+import { ToLowercasePipe } from 'src/resources/pipes/to-lowercase.pipe';
 
 @Controller('users')
 @CustomPermissions()
@@ -46,7 +47,7 @@ export class UsersController extends DefaultHttpResponse {
 
   @Get()
   @Roles(['ADMIN'])
-  async findAll(@Query('role') role: string) {
+  async findAll(@Query('role', ToLowercasePipe) role: string) {
     const user = await this.usersService.findAll(role);
     return this.success(user, 'Users fetched successfully');
   }

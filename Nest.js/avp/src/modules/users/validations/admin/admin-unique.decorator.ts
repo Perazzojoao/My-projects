@@ -6,16 +6,17 @@ import {
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { UsersAbstractRepository } from '../../repositories/users.abstract.repository';
+import { $Enums } from '@prisma/client';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
 export class AdminUniqueValidator implements ValidatorConstraintInterface {
   constructor(private userRepository: UsersAbstractRepository) {}
 
-  async validate(role: string) {
-    if (role !== 'ADMIN') return true;
-    const admin = await this.userRepository.findAll(role);
-    return !(admin.find((user) => user.role === 'ADMIN'));
+  async validate(role: $Enums.Role) {
+    if (role !== $Enums.Role.ADMIN) return true;
+    const admin = await this.userRepository.findAllByRole(role);
+    return !admin.find((user) => user.role === 'ADMIN');
   }
 }
 
