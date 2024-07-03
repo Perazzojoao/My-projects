@@ -40,10 +40,6 @@ import { RolesGuard } from './resources/guards/roles.guard';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
     ConsoleLogger,
     JwtTokenService,
   ],

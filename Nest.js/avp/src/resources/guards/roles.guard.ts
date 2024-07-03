@@ -4,16 +4,12 @@ import { RequestWithUser } from './auth.guard';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorators/roles.decorator';
 
-
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-  
+
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get(Roles, context.getHandler());
-    if (!roles) {
-      return true;
-    }
+    const roles = this.reflector.getAllAndOverride('roles', [context.getHandler(), context.getClass()]);
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
