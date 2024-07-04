@@ -15,17 +15,20 @@ datasource db {
 
 // Users model
 model User {
-  id           Int           @id @default(autoincrement())
-  name         String
-  email        String        @unique
-  password     String
-  role         Role          @default(STUDENT)
-  personalInfo PersonalInfo?
-  address      Address?
-  isActive     Boolean       @default(false)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
+  id            Int             @id @default(autoincrement())
+  name          String
+  email         String          @unique
+  password      String
+  role          Role            @default(STUDENT)
+  personalInfo  PersonalInfo?
+  address       Address?
+  classRoom     ClassRoom?
+  classRoomList ClassRoomList[]
+
+  isActive  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@map("users")
 }
@@ -60,4 +63,37 @@ model Address {
   cep    String
 
   @@map("addresses")
+}
+
+// ClassRooms model
+model ClassRoom {
+  id       Int             @id @default(autoincrement())
+  shift    Shift
+  grade    Grade
+  coord    User?           @relation(fields: [coordId], references: [id], onDelete: SetNull)
+  coordId  Int?            @unique @default(dbgenerated("NULL"))
+  students ClassRoomList[]
+
+  @@map("class_rooms")
+}
+
+enum Shift {
+  Manha
+  Tarde
+  Noite
+}
+
+enum Grade {
+  SEVEN // 7th grade
+  EIGHT // 8th grade
+}
+
+model ClassRoomList {
+  classRoom   ClassRoom @relation(fields: [classRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  classRoomId Int
+  student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentId   Int
+
+  @@id([classRoomId, studentId])
+  @@map("class_room_list")
 }
