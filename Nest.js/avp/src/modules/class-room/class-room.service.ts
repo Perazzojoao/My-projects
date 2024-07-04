@@ -11,25 +11,12 @@ export class ClassRoomService {
     private readonly classRoomRepository: ClassRoomAbstractRepository,
   ) {}
 
-  async findAll(user: JwtPayload) {
-    if (user.role === UserRole.COORD) {
-      return await this.classRoomRepository.findAllByCoordId(user.sub);
-    }
+  async findAll() {
     return await this.classRoomRepository.findAll();
   }
 
-  async findOne(id: number, user: JwtPayload) {
-    let classRoom: ClassRoomEntity | null;
-
-    if (user.role === UserRole.COORD) {
-      classRoom = await this.classRoomRepository.findOneByCoordId(id, user.sub);
-      if (!classRoom) {
-        throw new NotFoundException('Turma não encontrada');
-      }
-      return classRoom;
-    }
-
-    classRoom = await this.classRoomRepository.findOne(id);
+  async findOne(id: number) {
+    const classRoom = await this.classRoomRepository.findOne(id);
     if (!classRoom) {
       throw new NotFoundException('Turma não encontrada');
     }
