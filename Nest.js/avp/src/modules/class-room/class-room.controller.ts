@@ -13,6 +13,7 @@ import { Roles } from 'src/resources/decorators/roles.decorator';
 import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
 import { PublicRoute } from 'src/resources/decorators/public-route.decorator';
 import { RemoveCoordIdInterceptor } from 'src/resources/interceptors/remove-coord-id.interceptor';
+import { CoordOnlyPipe } from './validations/coord-only.pipe';
 
 @Controller('class-room')
 export class ClassRoomController extends DefaultHttpResponse {
@@ -45,6 +46,7 @@ export class ClassRoomController extends DefaultHttpResponse {
   async update(
     @Param('id', IdParseIntPipe) id: number,
     @Body() updateClassRoomDto: UpdateClassRoomDto,
+    @Body('coordId', CoordOnlyPipe) _: number | null,
   ) {
     const response = await this.classRoomService.update(id, updateClassRoomDto);
     return this.success(response, 'Turma atualizada com sucesso');
