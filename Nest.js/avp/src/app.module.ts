@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './resources/guards/auth.guard';
 import { JwtTokenService } from './JWT/jwt-token.service';
 import { RolesGuard } from './resources/guards/roles.guard';
+import { ClassRoomModule } from './modules/class-room/class-room.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RolesGuard } from './resources/guards/roles.guard';
     }),
     JwtTokenModule,
     AuthModule,
+    ClassRoomModule,
   ],
   controllers: [],
   providers: [

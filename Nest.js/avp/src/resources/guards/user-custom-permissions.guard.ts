@@ -19,9 +19,10 @@ export class UserCustomPermissionsGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const httpContext = context.switchToHttp();
     const request = httpContext.getRequest<RequestWithUser>();
-    const roles = this.reflector.getAllAndOverride<
-      Omit<'ADMIN', $Enums.Role>[] | []
-    >('custom-permissions', [context.getHandler(), context.getClass()]);
+    const roles = this.reflector.getAllAndOverride<$Enums.Role[] | []>(
+      'custom-permissions',
+      [context.getHandler(), context.getClass()],
+    );
     const { user } = request;
 
     if (user.role === $Enums.Role.ADMIN) {
@@ -32,7 +33,7 @@ export class UserCustomPermissionsGuard implements CanActivate {
       return true;
     }
 
-    if (!(roles as Omit<'ADMIN', $Enums.Role>[]).includes(user.role)) {
+    if (!(roles as $Enums.Role[]).includes(user.role)) {
       throw new ForbiddenException(
         'You do not have permission to access this resource',
       );

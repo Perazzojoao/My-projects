@@ -39,6 +39,11 @@ export class RemovePasswordInterceptor implements NestInterceptor {
             data: { token, user: userData },
           };
         }
+
+        if (!Object.keys(data).includes('password')) {
+          return response;
+        }
+
         const { password, ...userData } = data;
         return {
           message,
