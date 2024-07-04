@@ -28,8 +28,8 @@ export class ClassRoomService {
     if (!classRoom) {
       throw new NotFoundException('Turma não encontrada');
     }
-    Object.assign(classRoom, updateClassRoomDto);
+    // Object.assign(classRoom, updateClassRoomDto);
 
-    return await this.classRoomRepository.update(id, classRoom);
+    return await this.classRoomRepository.update(id, updateClassRoomDto);
   }
 }

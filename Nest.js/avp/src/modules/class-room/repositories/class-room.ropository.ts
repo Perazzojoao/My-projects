@@ -10,12 +10,17 @@ export class ClassRoomRepository implements ClassRoomAbstractRepository {
   async findAll(): Promise<ClassRoomEntity[]> {
     return await this.prisma.classRoom.findMany();
   }
-  async findOne(id: number): Promise<ClassRoomEntity | null> {
+  async findOne(id: number) {
     return await this.prisma.classRoom.findUnique({
       where: { id },
     });
   }
-  async update(id: number, data: Partial<ClassRoomEntity>): Promise<ClassRoomEntity> {
+  async findOneByCoordId(coordId: number): Promise<ClassRoomEntity | null> {
+    return await this.prisma.classRoom.findFirst({
+      where: { coordId },
+    });
+  }
+  async update(id: number, data: Partial<ClassRoomEntity>) {
     return await this.prisma.classRoom.update({
       where: { id },
       data,
