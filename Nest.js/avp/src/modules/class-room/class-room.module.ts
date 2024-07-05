@@ -15,5 +15,6 @@ import { UsersModule } from '../users/users.module';
       useClass: ClassRoomRepository,
     },
   ],
+  exports: [ClassRoomService, ClassRoomAbstractRepository],
 })
 export class ClassRoomModule {}
