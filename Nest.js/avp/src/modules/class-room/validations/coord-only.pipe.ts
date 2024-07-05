@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { UserRole } from 'src/modules/users/dto/create-user.dto';
 import { UsersAbstractRepository } from 'src/modules/users/repositories/users.abstract.repository';
-import { ClassRoomAbstractRepository } from '../repositories/class-room.abstract.repository';
+import { ClassRoomRepository } from '../repositories/class-room.ropository';
 
 @Injectable()
 export class CoordOnlyPipe implements PipeTransform {
   constructor(
     private readonly usersRepository: UsersAbstractRepository,
-    private readonly classRoomRepository: ClassRoomAbstractRepository,
+    private readonly classRoomRepository: ClassRoomRepository,
   ) {}
 
   async transform(coordId: number | null) {

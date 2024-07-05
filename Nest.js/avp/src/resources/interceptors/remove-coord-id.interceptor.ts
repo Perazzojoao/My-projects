@@ -20,7 +20,7 @@ export class RemoveCoordIdInterceptor implements NestInterceptor {
         const { data, message, statusCode } = response;
 
         const updatedData = data.map((classRoom) => {
-          const { coordId, ...classRoomData } = classRoom;
+          const { coordId, students, ...classRoomData } = classRoom;
           return classRoomData;
         });
 

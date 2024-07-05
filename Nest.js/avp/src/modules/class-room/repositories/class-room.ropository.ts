@@ -1,18 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { ClassRoomEntity } from '../entities/class-room.entity';
-import { ClassRoomAbstractRepository } from './class-room.abstract.repository';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
-export class ClassRoomRepository implements ClassRoomAbstractRepository {
+export class ClassRoomRepository {
   constructor(private readonly prisma: DatabaseService) {}
 
-  async findAll(): Promise<ClassRoomEntity[]> {
-    return await this.prisma.classRoom.findMany();
+  async findAll() {
+    return await this.prisma.classRoom.findMany({
+      include: {
+        students: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                personalInfo: {
+                  select: {
+                    cpf: true,
+                    rgm: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
   async findOne(id: number) {
     return await this.prisma.classRoom.findUnique({
       where: { id },
+      include: {
+        students: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                personalInfo: {
+                  select: {
+                    cpf: true,
+                    rgm: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
   }
   async findOneByCoordId(coordId: number): Promise<ClassRoomEntity | null> {
@@ -21,9 +61,13 @@ export class ClassRoomRepository implements ClassRoomAbstractRepository {
     });
   }
   async update(id: number, data: Partial<ClassRoomEntity>) {
+    const { students, ...rest } = data;
     return await this.prisma.classRoom.update({
       where: { id },
-      data,
+      data: {
+        students: {},
+        ...rest,
+      },
     });
   }
 }

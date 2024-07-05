@@ -1,14 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateClassRoomDto } from './dto/update-class-room.dto';
-import { JwtPayload } from 'src/JWT/jwt-token.service';
-import { ClassRoomAbstractRepository } from './repositories/class-room.abstract.repository';
-import { UserRole } from '../users/dto/create-user.dto';
-import { ClassRoomEntity } from './entities/class-room.entity';
+import { ClassRoomRepository } from './repositories/class-room.ropository';
 
 @Injectable()
 export class ClassRoomService {
   constructor(
-    private readonly classRoomRepository: ClassRoomAbstractRepository,
+    private readonly classRoomRepository: ClassRoomRepository,
   ) {}
 
   async findAll() {

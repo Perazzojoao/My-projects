@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClassListService } from './class-list.service';
 import { ClassListController } from './class-list.controller';
-import { ClassListAbstractRepository } from './repositories/class-room.abstract.repository';
-import { ClassListRepository } from './repositories/class-room.ropository';
+import { ClassListRepository } from './repositories/class-list.ropository';
 import { ClassRoomModule } from '../class-room/class-room.module';
 import { ClassRoomService } from '../class-room/class-room.service';
 
@@ -12,10 +11,7 @@ import { ClassRoomService } from '../class-room/class-room.service';
   providers: [
     ClassListService,
     ClassRoomService,
-    {
-      provide: ClassListAbstractRepository,
-      useClass: ClassListRepository,
-    },
+    ClassListRepository,
   ],
 })
 export class ClassListModule {}

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateClassListDto } from './dto/update-class-list.dto';
 import { CreateClassListDto } from './dto/create-class-list.dto';
-import { ClassListAbstractRepository } from './repositories/class-room.abstract.repository';
 import { ClassRoomService } from '../class-room/class-room.service';
+import { ClassListRepository } from './repositories/class-list.ropository';
 
 @Injectable()
 export class ClassListService {
   constructor(
-    private readonly classListRepository: ClassListAbstractRepository,
+    private readonly classListRepository: ClassListRepository,
     private readonly classRoomService: ClassRoomService,
   ) {}
 
@@ -25,7 +25,7 @@ export class ClassListService {
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} classList`;
+    return await this.classListRepository.findOne(id);
   }
 
   async update(id: number, updateClassListDto: UpdateClassListDto) {

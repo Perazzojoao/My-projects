@@ -10,11 +10,8 @@ import { UsersModule } from '../users/users.module';
   controllers: [ClassRoomController],
   providers: [
     ClassRoomService,
-    {
-      provide: ClassRoomAbstractRepository,
-      useClass: ClassRoomRepository,
-    },
+    ClassRoomRepository,
   ],
-  exports: [ClassRoomService, ClassRoomAbstractRepository],
+  exports: [ClassRoomService, ClassRoomRepository],
 })
 export class ClassRoomModule {}
