@@ -6,8 +6,18 @@ import { DatabaseService } from 'src/database/database.service';
 export class ClassRoomRepository {
   constructor(private readonly prisma: DatabaseService) {}
 
-  async findAll() {
-    return await this.prisma.classRoom.findMany({
+  async addStudents(id: number, students: number[]) {
+    return await this.prisma.classRoom.update({
+      where: { id: id },
+      data: {
+        students: {
+          create: students.map((id) => ({
+            student: {
+              connect: { id },
+            },
+          })),
+        },
+      },
       include: {
         students: {
           select: {
@@ -30,6 +40,33 @@ export class ClassRoomRepository {
       },
     });
   }
+
+  async findAll() {
+    return await this.prisma.classRoom.findMany({
+      orderBy: { id: 'asc' },
+      include: {
+        students: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                personalInfo: {
+                  select: {
+                    cpf: true,
+                    rgm: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async findOne(id: number) {
     return await this.prisma.classRoom.findUnique({
       where: { id },
@@ -60,6 +97,7 @@ export class ClassRoomRepository {
       where: { coordId },
     });
   }
+
   async update(id: number, data: Partial<ClassRoomEntity>) {
     const { students, ...rest } = data;
     return await this.prisma.classRoom.update({
