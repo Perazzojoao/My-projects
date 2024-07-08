@@ -5,6 +5,7 @@ import { ClassRoomRepository } from './repositories/class-room.ropository';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { JwtTokenService } from 'src/JWT/jwt-token.service';
+import { StudentOnlyValidator } from './validations/student-only.decorator';
 
 @Module({
   imports: [UsersModule],
@@ -14,7 +15,8 @@ import { JwtTokenService } from 'src/JWT/jwt-token.service';
     ClassRoomRepository,
     UsersService,
     JwtTokenService,
+    StudentOnlyValidator,
   ],
-  exports: [ClassRoomService, ClassRoomRepository],
+  exports: [],
 })
 export class ClassRoomModule {}
