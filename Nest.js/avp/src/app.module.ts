@@ -7,16 +7,13 @@ import {
   APP_FILTER,
   APP_GUARD,
   APP_INTERCEPTOR,
-  Reflector,
 } from '@nestjs/core';
 import { LoggerInterceptor } from './resources/interceptors/logger/logger.interceptor';
 import { JwtTokenModule } from './jwt/jwt-token.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './resources/guards/auth.guard';
 import { JwtTokenService } from './JWT/jwt-token.service';
-import { RolesGuard } from './resources/guards/roles.guard';
 import { ClassRoomModule } from './modules/class-room/class-room.module';
-import { ClassListModule } from './modules/class-list/class-list.module';
 
 @Module({
   imports: [
@@ -28,7 +25,6 @@ import { ClassListModule } from './modules/class-list/class-list.module';
     JwtTokenModule,
     AuthModule,
     ClassRoomModule,
-    ClassListModule,
   ],
   controllers: [],
   providers: [

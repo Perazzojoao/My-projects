@@ -5,6 +5,9 @@ import {
   Patch,
   Param,
   UseInterceptors,
+  Post,
+  HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ClassRoomService } from './class-room.service';
 import { UpdateClassRoomDto } from './dto/update-class-room.dto';
@@ -14,6 +17,7 @@ import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
 import { PublicRoute } from 'src/resources/decorators/public-route.decorator';
 import { RemoveCoordIdInterceptor } from 'src/resources/interceptors/remove-coord-id.interceptor';
 import { CoordOnlyPipe } from './validations/coord-only.pipe';
+import { CreateClassRoomDto } from './dto/create-class.dto';
 
 @Controller('class-room')
 export class ClassRoomController extends DefaultHttpResponse {
@@ -21,9 +25,25 @@ export class ClassRoomController extends DefaultHttpResponse {
     super();
   }
 
+  @Post(':id')
+  async addStudent(
+    @Param('id', IdParseIntPipe) id: number,
+    @Body() createClassListDto: CreateClassRoomDto,
+  ) {
+    const classList = await this.classRoomService.addStudent(
+      id,
+      createClassListDto,
+    );
+    return this.success(
+      classList,
+      'Aluno(s) adicionados com cucesso',
+      HttpStatus.CREATED,
+    );
+  }
+
   @Get('private')
-  async findAll() {
-    const response = await this.classRoomService.findAll();
+  async findAll(@Query('coord') coordId: number) {
+    const response = await this.classRoomService.findAll(coordId);
     return this.success(response, 'Turmas encontradas com sucesso');
   }
 

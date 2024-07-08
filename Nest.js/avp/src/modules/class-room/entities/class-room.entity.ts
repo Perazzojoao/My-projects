@@ -7,7 +7,7 @@ export class ClassRoomEntity implements ClassRoom {
   grade: $Enums.Grade;
   coordId: number | null;
 
-  students?: UserEntity[];
+  students?: UserEntity[] | number[];
 
   constructor (classRoom: Partial<ClassRoomEntity>) {
     Object.assign(this, classRoom)

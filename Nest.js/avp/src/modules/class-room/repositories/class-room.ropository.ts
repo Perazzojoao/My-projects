@@ -36,6 +36,7 @@ export class ClassRoomRepository {
               },
             },
           },
+          orderBy: { studentId: 'asc' },
         },
       },
     });
@@ -62,6 +63,34 @@ export class ClassRoomRepository {
               },
             },
           },
+          orderBy: {studentId: 'asc'},
+        },
+      },
+    });
+  }
+
+  async findAllByCoordId(coordId: number) {
+    return await this.prisma.classRoom.findMany({
+      where: { coordId },
+      include: {
+        students: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                personalInfo: {
+                  select: {
+                    cpf: true,
+                    rgm: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: {studentId: 'asc'},
         },
       },
     });
@@ -88,6 +117,7 @@ export class ClassRoomRepository {
               },
             },
           },
+          orderBy: {studentId: 'asc'}
         },
       },
     });

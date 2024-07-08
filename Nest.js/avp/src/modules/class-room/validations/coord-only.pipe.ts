@@ -16,7 +16,7 @@ export class CoordOnlyPipe implements PipeTransform {
   ) {}
 
   async transform(coordId: number | null) {
-    if (coordId === null) {
+    if (!coordId) {
       return null;
     }
 

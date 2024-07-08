@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsArray, ArrayMinSize } from "class-validator";
 
-export class CreateClassListDto {
+export class CreateClassRoomDto {
   @IsNotEmpty({ message: 'O campo students não pode ser vazio', each: true })
   @IsNumber(
     { allowNaN: false },
