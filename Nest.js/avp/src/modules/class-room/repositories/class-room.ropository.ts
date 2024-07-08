@@ -138,4 +138,20 @@ export class ClassRoomRepository {
       },
     });
   }
+
+  async removeStudents(id: number, students: number[]) {
+    return await this.prisma.classRoom.update({
+      where: { id },
+      data: {
+        students: {
+          delete: students.map((studentId) => ({
+            classRoomId_studentId: {
+              classRoomId: id,
+              studentId,
+            }
+          })),
+        }
+      }
+    });
+  }
 }

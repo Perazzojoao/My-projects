@@ -3,6 +3,8 @@ import { ClassRoomService } from './class-room.service';
 import { ClassRoomController } from './class-room.controller';
 import { ClassRoomRepository } from './repositories/class-room.ropository';
 import { UsersModule } from '../users/users.module';
+import { UsersService } from '../users/users.service';
+import { JwtTokenService } from 'src/JWT/jwt-token.service';
 
 @Module({
   imports: [UsersModule],
@@ -10,6 +12,8 @@ import { UsersModule } from '../users/users.module';
   providers: [
     ClassRoomService,
     ClassRoomRepository,
+    UsersService,
+    JwtTokenService,
   ],
   exports: [ClassRoomService, ClassRoomRepository],
 })

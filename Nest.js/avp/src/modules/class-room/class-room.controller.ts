@@ -8,6 +8,7 @@ import {
   Post,
   HttpStatus,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { ClassRoomService } from './class-room.service';
 import { UpdateClassRoomDto } from './dto/update-class-room.dto';
@@ -70,5 +71,15 @@ export class ClassRoomController extends DefaultHttpResponse {
   ) {
     const response = await this.classRoomService.update(id, updateClassRoomDto);
     return this.success(response, 'Turma atualizada com sucesso');
+  }
+
+  @Delete(':id')
+  @Roles(['ADMIN', 'SECRE'])
+  async remove(
+    @Param('id', IdParseIntPipe) id: number,
+    @Body() updateClassRoomDto: UpdateClassRoomDto,
+  ) {
+    const response = await this.classRoomService.removeStudents(id, updateClassRoomDto);
+    return this.success(response, 'Alunos removidos com sucesso');
   }
 }
