@@ -6,6 +6,9 @@ import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { JwtTokenService } from 'src/JWT/jwt-token.service';
 import { StudentOnlyValidator } from './validations/student-only.decorator';
+import { UsersAbstractRepository } from '../users/repositories/users.abstract.repository';
+import { UsersRepository } from '../users/repositories/users.repository';
+import { CoordOnlyValidator } from './validations/coord-only.decorator';
 
 @Module({
   imports: [UsersModule],
@@ -16,6 +19,11 @@ import { StudentOnlyValidator } from './validations/student-only.decorator';
     UsersService,
     JwtTokenService,
     StudentOnlyValidator,
+    CoordOnlyValidator,
+    {
+      provide: UsersAbstractRepository,
+      useClass: UsersRepository,
+    }
   ],
   exports: [],
 })

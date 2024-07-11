@@ -17,7 +17,6 @@ import { Roles } from 'src/resources/decorators/roles.decorator';
 import { IdParseIntPipe } from 'src/resources/pipes/id-parse-int.pipe';
 import { PublicRoute } from 'src/resources/decorators/public-route.decorator';
 import { RemoveCoordIdInterceptor } from 'src/resources/interceptors/remove-coord-id.interceptor';
-import { CoordOnlyPipe } from './validations/coord-only.pipe';
 import { CreateClassRoomDto } from './dto/create-class.dto';
 
 @Controller('class-room')
@@ -67,7 +66,6 @@ export class ClassRoomController extends DefaultHttpResponse {
   async update(
     @Param('id', IdParseIntPipe) id: number,
     @Body() updateClassRoomDto: UpdateClassRoomDto,
-    @Body('coordId', CoordOnlyPipe) _: number | null,
   ) {
     const response = await this.classRoomService.update(id, updateClassRoomDto);
     return this.success(response, 'Turma atualizada com sucesso');
@@ -79,7 +77,10 @@ export class ClassRoomController extends DefaultHttpResponse {
     @Param('id', IdParseIntPipe) id: number,
     @Body() updateClassRoomDto: UpdateClassRoomDto,
   ) {
-    const response = await this.classRoomService.removeStudents(id, updateClassRoomDto);
+    const response = await this.classRoomService.removeStudents(
+      id,
+      updateClassRoomDto,
+    );
     return this.success(response, 'Alunos removidos com sucesso');
   }
 }
