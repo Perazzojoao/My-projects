@@ -1,11 +1,11 @@
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View, Keyboard } from "react-native";
 import Title from "../components/Title";
 import Main from "../components/Main";
 
 function App() {
   return ( 
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#e0e5e5" />
+      <StatusBar barStyle="light-content" backgroundColor="#e0e5e5" />
       <Title />
       <Main />
     </View>
