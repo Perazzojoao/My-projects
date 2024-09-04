@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
 	},
 	exibirIMC: {
 		width: '100%',
-		height: '50%',
 		display: 'flex',
 		justifyContent: 'flex-start',
 	},

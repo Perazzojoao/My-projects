@@ -1,14 +1,14 @@
-import { Text } from "react-native";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
+import { View, Text } from "react-native";
+import styles from "./stle";
 
 interface ItemProps {
   imc: number;
 }
 
 function Item({ imc }: ItemProps) {
-  return ( 
-    <View>
-      <Text>IMC: {imc}</Text>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title} >IMC: <Text style={styles.result} >{imc}</Text></Text>
     </View>
   );
 }

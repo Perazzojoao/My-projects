@@ -2,6 +2,12 @@ import { useState } from "react";
 import { View, Text, TextInput, Vibration, TouchableOpacity, Keyboard, Pressable } from "react-native";
 import ResultImc from "./ResultImc";
 import styles from "./style";
+import Historico from "../Historico";
+
+export interface IHistorico {
+  id: number;
+  imc: number;
+}
 
 function Form() {
   const [message, setMessage] = useState("");
@@ -9,6 +15,7 @@ function Form() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [historico, setHistorico] = useState<IHistorico[]>([]);
 
   function verifyImc(imc: number) {
     if (imc === 0) {
@@ -25,6 +32,7 @@ function Form() {
     const result = (formatedWeight / (formatedHeight * formatedHeight)).toFixed(2);
     verifyImc(Number(result));
     setImc(Number(result));
+    setHistorico(arr => [...arr, { id: arr.length + 1, imc: Number(result) }]);
   }
 
   function submitHandler() {
@@ -79,6 +87,7 @@ function Form() {
           </TouchableOpacity>
         </View>
       }
+      <Historico data={historico.reverse()} />
     </View>
   );
 }

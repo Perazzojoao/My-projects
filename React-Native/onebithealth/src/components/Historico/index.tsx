@@ -1,11 +1,17 @@
 import { FlatList, Text, View } from "react-native";
 import Item from "./Item";
+import { IHistorico } from "../Form";
+import styles from "./style";
 
-function Historico() {
-  return ( 
-    <View>
-      <Text>Historico</Text>
-      <FlatList data={null} renderItem={item => <Item  imc={0} />} />
+interface HistoricoProps {
+  data: IHistorico[];
+}
+
+function Historico({ data }: HistoricoProps) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Histórico</Text>
+      <FlatList data={data} renderItem={({ item }) => <Item key={item.id} imc={item.imc} />} keyExtractor={(item) => item.id.toString()} style={{ width: '100%' }} />
     </View>
   );
 }
